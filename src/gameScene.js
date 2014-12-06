@@ -27,8 +27,8 @@ var GameSceneLayer = cc.Layer.extend({
         this.schedule(function(dt){
             this.blue.update(dt);
             this.red.update(dt);
+            bulletController.attacks(dt);
             gc.update(dt);
-
         },0);
 
         this.initKeyBoardControl();
@@ -127,6 +127,7 @@ var GameScene = cc.Scene.extend({
         this._super();
         var layer = new GameSceneLayer();
         this.addChild(layer);
+        currentLayer = layer;
     }
 });
 

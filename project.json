@@ -18,6 +18,7 @@
         "src/gameController.js",
         "src/gameMenuScene.js",
         "src/gameOverScene.js",
-        "src/gameScene.js"
+        "src/gameScene.js",
+        "src/bulletController.js"
     ]
 }

@@ -51,7 +51,8 @@ var Hero = cc.Node.extend({
 
         this.setPosition(this.initPos);
         this.setScale(0.3);
-        this.setRotation(this.base_angel);
+        this.base.setRotation(this.base_angel);
+        this.tower.setRotation(this.tower_angel);
 
     },
     setStatus: function(status){
@@ -59,7 +60,11 @@ var Hero = cc.Node.extend({
     },
     shoot: function()
     {
-
+        var mask;
+        if(this.colortype == g_ColorType.blue) mask =1;
+        else mask =2;
+        cc.log(this.tower_angel);
+        bulletController.spawnBullet(mask,this.getPosition(),cc.degreesToRadians(this.tower_angel));
     },
     updateMove: function(dt){
         var cur_pos = this.getPosition();
@@ -78,13 +83,8 @@ var Hero = cc.Node.extend({
         this.base_angel = new_angel;
         cc.log(this.base_angel);
         //this.aimer.setRotation(new_angel);
-        this.setRotation(new_angel);
+        this.base.setRotation(new_angel);
     },
-    shoot: function()
-    {
-
-    },
-
     update: function(dt){
         switch(this.status)
         {

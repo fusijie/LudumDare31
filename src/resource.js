@@ -3,7 +3,8 @@ var res = {
     CloseNormal_png : "res/CloseNormal.png",
     CloseSelected_png : "res/CloseSelected.png",
     Red: "res/red.png",
-    Blue: "res/blue.png"
+    Blue: "res/blue.png",
+    bubble_png : "res/bubble.png"
 };
 
 var g_resources = [];
