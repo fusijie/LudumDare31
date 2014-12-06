@@ -22,38 +22,41 @@ var Hero = cc.Node.extend({
         this.colortype = colortype;
 
         //add entity
-        var spriteFrameName = "";
+        var baseFrameName = "";
         var aimerFrameName = "";
+        var towerFramName = "";
         if(this.colortype == g_ColorType.blue)
         {
-            spriteFrameName = res.Blue;
-            aimerFrameName = res.Blue;
+            baseFrameName = res.blue_base;
+            towerFramName = res.blue_tower;
+            aimerFrameName = res.blue_aimer;
             this.initPos = cc.p(200,cc.winSize.height/2);
             this.tower_angel = -90;
             this.base_angel = -90;
         }
         else if(this.colortype == g_ColorType.red)
         {
-            spriteFrameName = res.Red;
-            aimerFrameName = res.Red;
+            baseFrameName = res.red_base;
+            towerFramName = res.red_tower;
+            aimerFrameName = res.red_aimer;
             this.initPos = cc.p(cc.winSize.width-200, cc.winSize.height/2);
             this.tower_angel = -135;
             this.base_angel = -135;
         }
         else
             cc.log("error character color");
-        this.base  = new cc.Sprite(spriteFrameName);
+        this.base  = new cc.Sprite(baseFrameName);
         this.addChild(this.base,1);
 
-        this.tower = new cc.Sprite(spriteFrameName);
-        this.tower.setScale(0.3);
+        this.tower = new cc.Sprite(towerFramName);
         this.addChild(this.tower,2);
 
-        this.setPosition(this.initPos);
-        this.setScale(0.3);
-        this.base.setRotation(this.base_angel);
-        this.tower.setRotation(this.tower_angel);
+        this.aimer = new cc.Sprite(aimerFrameName);
+        this.addChild(this.aimer,3);
 
+        this.setPosition(this.initPos);
+        this.tower.setRotation(this.tower_angel);
+        this.aimer.setRotation(this.base_angel);
     },
     setStatus: function(status){
         this.status = status;
@@ -63,7 +66,6 @@ var Hero = cc.Node.extend({
         var mask;
         if(this.colortype == g_ColorType.blue) mask =1;
         else mask =2;
-        cc.log(this.tower_angel);
         bulletController.spawnBullet(mask,this.getPosition(),cc.degreesToRadians(this.tower_angel));
     },
     updateMove: function(dt){
@@ -75,15 +77,12 @@ var Hero = cc.Node.extend({
     updateTowerRoll: function(dt){
         var new_angel = (this.tower_angel + CONST_INCREASE_TOWER_ANGEL)%360;
         this.tower_angel = new_angel;
-        //this.aimer.setRotation(new_angel);
         this.tower.setRotation(new_angel);
     },
     updateBaseRoll: function(dt){
         var new_angel = (this.base_angel + CONST_INCREASE_BASE_ANGEL)%360;
         this.base_angel = new_angel;
-        cc.log(this.base_angel);
-        //this.aimer.setRotation(new_angel);
-        this.base.setRotation(new_angel);
+        this.aimer.setRotation(new_angel);
     },
     update: function(dt){
         switch(this.status)

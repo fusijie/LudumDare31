@@ -14,15 +14,33 @@ var GameSceneLayer = cc.Layer.extend({
 
         this._super();
 
+        //add Bk
+        var bk =new cc.Sprite(res.game_bk);
+        bk.attr({
+            x: cc.winSize.width/2,
+            y: cc.winSize.height/2
+        });
+        this.addChild(bk,1);
+
+        //add Hero
         this.blue = new Hero(g_ColorType.blue);
-        this.addChild(this.blue);
+        this.addChild(this.blue,2);
         this.red = new Hero(g_ColorType.red);
-        this.addChild(this.red);
+        this.addChild(this.red,2);
+
+        //add Border
+        var border = new cc.Sprite(res.game_border);
+        border.attr({
+            x: cc.winSize.width/2,
+            y: cc.winSize.height/2
+        });
+        this.addChild(border,3)
 
         //after tips.
         this.blue.setStatus(STATUS.MOVE);
         this.red.setStatus(STATUS.MOVE);
 
+        //add Update
         var gc = new GameController(this.blue,this.red,this.blue_copy,this.red_copy);
         this.schedule(function(dt){
             this.blue.update(dt);
