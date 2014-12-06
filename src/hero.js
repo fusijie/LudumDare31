@@ -5,7 +5,7 @@
 var CONST_MOVE_SPEED = 100;
 var CONST_INCREASE_BASE_ANGEL = 3;
 var CONST_INCREASE_TOWER_ANGEL = 3;
-var CONST_CD_TIME = 3;
+var CONST_CD_TIME = 0;
 var STATUS =  {IDLE: "idle", MOVE: "move", ROLL: "roll", SHOOT: "shoot", DEAD: "dead", WIN: "win"};
 
 var Hero = cc.Node.extend({
@@ -17,7 +17,7 @@ var Hero = cc.Node.extend({
     base_angel:0,
     tower_angel: 0,
     status: STATUS.IDLE,
-    radius: 20,
+    radius: 25,
     mass: 100,
     isClockWise: true,
     isCDing: false,
