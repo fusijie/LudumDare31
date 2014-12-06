@@ -6,17 +6,21 @@ var currentLayer;
 var bulletController = {
     bulletsA: [],
     bulletsB: [],
-    //conservationOfMomentum: function(obj1, obj2){
-    //    var obj1Pos = obj1.getPosition();
-    //    var obj2Pos = obj2.getPosition();
-    //    var angle = cc.pToAngle(cc.pSub(obj1Pos, obj2Pos));
-    //    local distance = miniDistance - tempDistance + 1 // Add extra 1 to avoid 'tempDistance < miniDistance' is always true
-    //    local distance1 = (1 - object1._mass / (object1._mass + object2._mass) ) * distance
-    //    local distance2 = distance - distance1
-    //
-    //    object1:setPosition(cc.pRotateByAngle(cc.pAdd(cc.p(distance1,0),obj1Pos), obj1Pos, angle))
-    //    object2:setPosition(cc.pRotateByAngle(cc.pAdd(cc.p(-distance2,0),obj2Pos), obj2Pos, angle))
-    //},
+    conservationOfMomentum: function(obj1, obj2){
+        if(obj1.speed.x * obj2.speed.x > 0){
+            obj1.speed.x = (obj1.speed.x * obj1.mass - obj2.mass * obj2.speed.x) / obj1.mass;
+        }
+        else{
+            obj1.speed.x = (obj1.speed.x * obj1.mass + obj2.mass * obj2.speed.x) / obj1.mass;
+        }
+
+        if(obj1.speed.y * obj2.speed.y > 0){
+            obj1.speed.y = (obj1.speed.y * obj1.mass - obj2.mass * obj2.speed.y) / obj1.mass;
+        }
+        else{
+            obj1.speed.y = (obj1.speed.y * obj1.mass + obj2.mass * obj2.speed.y) / obj1.mass;
+        }
+    },
     proccessArray: function(bullets, mask, dt){
         for(var i = bullets.length-1; i >= 0; i--){
             var bullet =  bullets[i];
@@ -29,17 +33,16 @@ var bulletController = {
                 if(dist < bullet.radius*bullet.getScale() + bulletX.radius*bulletX.getScale()){
                     bullet.onCollide(bulletX);
                     if(bullet.mass >= bulletX.mass){
+                        this.conservationOfMomentum(bullet, bulletX);
                         //if bullet is younger than bulletX, bulletX dead
                         //otherwise bullet dead
-                        bullet.runAction(cc.scaleBy(0.3, 1.5));
 
                         bulletsX.splice(k, 1);
                         var tempAction = cc.spawn(cc.scaleTo(0.2, 0.1), cc.fadeOut(0.2));
                         bulletX.runAction(cc.sequence(tempAction, cc.removeSelf()));
-
                     }
                     else{
-                        bulletX.runAction(cc.scaleBy(0.3, 1.5));
+                        this.conservationOfMomentum(bulletX, bullet);
 
                         bullets.splice(i, 1);
                         var tempAction = cc.spawn(cc.scaleTo(0.2, 0.1), cc.fadeOut(0.2));
@@ -47,6 +50,28 @@ var bulletController = {
 
                         continue;
                     }
+                }
+            }
+
+            if(mask === 1) {
+                var target = currentLayer.blue;
+                var dist = cc.pDistance(bullet.getPosition(), target.getPosition());
+                if (dist < bullet.radius * bullet.getScale() + target.radius) {
+                    bullet.onCollide(target);
+
+                    //this.conservationOfMomentum(target, bullet);
+                    bullet.curDuration = bullet.curDuration + 1;
+
+                }
+            }
+            else if(mask ===2){
+                var target = currentLayer.red;
+                var dist = cc.pDistance(bullet.getPosition(), target.getPosition());
+                if (dist < bullet.radius * bullet.getScale() + target.radius) {
+                    bullet.onCollide(target);
+
+                    //this.conservationOfMomentum(target, bullet);
+                    bullet.curDuration = bullet.curDuration + 1;
                 }
             }
 
@@ -76,7 +101,7 @@ var BasicBullet = cc.Sprite.extend({
         this._super(res.bubble_png)
         this.mask = 0;  //1 is Role A, 2 is Role B, 0 is nobody
         this.angle = 0; //arc of attack, in radians
-        this.speed = {x: 100, y: 100}; //traveling speed
+        this.speed = {x: 50, y: 50}; //traveling speed
         this.duration = 10;
         this.curDuration = 0;
         this.radius = 20;
