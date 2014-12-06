@@ -5,6 +5,7 @@
 var CONST_MOVE_SPEED = 100;
 var CONST_INCREASE_BASE_ANGEL = 3;
 var CONST_INCREASE_TOWER_ANGEL = 3;
+var CONST_CD_TIME = 3;
 var STATUS =  {IDLE: "idle", MOVE: "move", ROLL: "roll", SHOOT: "shoot", DEAD: "dead", WIN: "win"};
 
 var Hero = cc.Node.extend({
@@ -18,6 +19,7 @@ var Hero = cc.Node.extend({
     status: STATUS.IDLE,
     isClockWise: true,
     isCDing: false,
+    lastCDTime: 0,
     ctor: function(colortype) {
         this._super();
 
@@ -67,10 +69,14 @@ var Hero = cc.Node.extend({
     },
     shoot: function()
     {
-        var mask;
-        if(this.colortype == g_ColorType.blue) mask =1;
-        else mask =2;
-        bulletController.spawnBullet(mask,this.getPosition(),cc.degreesToRadians(this.tower_angel));
+        if(!this.isCDing) {
+            var mask;
+            if (this.colortype == g_ColorType.blue) mask = 1;
+            else mask = 2;
+            bulletController.spawnBullet(mask, this.getPosition(), cc.degreesToRadians(this.tower_angel));
+            this.lastCDTime = CONST_CD_TIME;
+            this.isCDing = true;
+        }
     },
     updateMove: function(dt){
         var cur_pos = this.getPosition();
@@ -97,6 +103,14 @@ var Hero = cc.Node.extend({
         this.aimer.setRotation(new_angel);
     },
     update: function(dt){
+        if(this.isCDing)
+        {
+            this.lastCDTime -= dt;
+            if(this.lastCDTime<=0) {
+                this.isCDing = false;
+                this.lastCDTime = 0;
+            }
+        }
         switch(this.status)
         {
             case STATUS.IDLE:
@@ -110,7 +124,6 @@ var Hero = cc.Node.extend({
                 this.updateMove(dt);
                 break;
             case STATUS.SHOOT:
-                //this.updateTowerRoll(dt);
                 break;
         }
     }

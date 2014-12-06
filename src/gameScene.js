@@ -63,7 +63,6 @@ var GameSceneLayer = cc.Layer.extend({
                     if(!target.temp_90_pressed && !target.temp_88_pressed)
                     {
                         target.temp_90_pressed = true;
-                        target.blue.isClockWise = true;
                         target.blue.setStatus(STATUS.ROLL);
                         target.blue.aimer.setVisible(true);
                         cc.log("Key " + keyCode.toString() + " was pressed!");
@@ -74,9 +73,7 @@ var GameSceneLayer = cc.Layer.extend({
                     if(!target.temp_88_pressed && !target.temp_90_pressed)
                     {
                         target.temp_88_pressed = true;
-                        target.blue.isClockWise = false;
-                        target.blue.setStatus(STATUS.ROLL);
-                        target.blue.aimer.setVisible(true);
+                        if(!target.blue.isCDing) target.blue.shoot();
                         cc.log("Key " + keyCode.toString() + " was pressed!");
                     }
                 }
@@ -85,7 +82,6 @@ var GameSceneLayer = cc.Layer.extend({
                     if(!target.temp_190_pressed && !target.temp_191_pressed)
                     {
                         target.temp_190_pressed = true;
-                        target.red.isClockWise = true;
                         target.red.setStatus(STATUS.ROLL);
                         target.red.aimer.setVisible(true);
                         cc.log("Key " + keyCode.toString() + " was pressed!");
@@ -96,9 +92,7 @@ var GameSceneLayer = cc.Layer.extend({
                     if(!target.temp_191_pressed && !target.temp_190_pressed)
                     {
                         target.temp_191_pressed = true;
-                        target.red.isClockWise = false;
-                        target.red.setStatus(STATUS.ROLL);
-                        target.red.aimer.setVisible(true);
+                        if(!target.red.isCDing) target.red.shoot();
                         cc.log("Key " + keyCode.toString() + " was pressed!");
                     }
                 }
@@ -110,7 +104,7 @@ var GameSceneLayer = cc.Layer.extend({
                     if(target.temp_90_pressed)
                     {
                         target.temp_90_pressed = false;
-                        target.blue.shoot();
+                        target.blue.isClockWise = !target.blue.isClockWise;
                         target.blue.setStatus(STATUS.MOVE);
                         target.blue.aimer.setVisible(false);
                         cc.log("Key " + keyCode.toString() + " was released!");
@@ -121,9 +115,7 @@ var GameSceneLayer = cc.Layer.extend({
                     if(target.temp_88_pressed)
                     {
                         target.temp_88_pressed = false;
-                        target.blue.shoot();
                         target.blue.setStatus(STATUS.MOVE);
-                        target.blue.aimer.setVisible(false);
                         cc.log("Key " + keyCode.toString() + " was released!");
                     }
                 }
@@ -132,7 +124,7 @@ var GameSceneLayer = cc.Layer.extend({
                     if(target.temp_190_pressed)
                     {
                         target.temp_190_pressed = false;
-                        target.red.shoot();
+                        target.red.isClockWise = !target.red.isClockWise;
                         target.red.setStatus(STATUS.MOVE);
                         target.red.aimer.setVisible(false);
                         cc.log("Key " + keyCode.toString() + " was released!");
@@ -143,9 +135,7 @@ var GameSceneLayer = cc.Layer.extend({
                     if(target.temp_191_pressed)
                     {
                         target.temp_191_pressed = false;
-                        target.red.shoot();
                         target.red.setStatus(STATUS.MOVE);
-                        target.red.aimer.setVisible(false);
                         cc.log("Key " + keyCode.toString() + " was released!");
                     }
                 }
