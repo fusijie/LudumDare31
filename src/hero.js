@@ -17,6 +17,8 @@ var Hero = cc.Node.extend({
     base_angel:0,
     tower_angel: 0,
     status: STATUS.IDLE,
+    radius: 20,
+    mass: 100,
     isClockWise: true,
     isCDing: false,
     lastCDTime: 0,
