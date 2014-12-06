@@ -5,7 +5,7 @@ var HelloWorldLayer = cc.Layer.extend({
         //////////////////////////////
         // 1. super init first
         this._super();
-        
+
 
         /////////////////////////////
         // 2. add a menu item with "X" image, which is clicked to quit the program
@@ -65,7 +65,17 @@ var HelloWorldLayer = cc.Layer.extend({
                 cc.tintTo(2.5,255,125,0)
             )
         );
+
+        this.schedule(this.loop, 3);
+        this.scheduleUpdate();
+
         return true;
+    },
+    loop: function(){
+        bulletController.spawnBullet(1, cc.p(cc.winSize.width/2, cc.winSize.height/2), cc.PI+(cc.random0To1()*10));
+    },
+    update: function(dt){
+        bulletController.attacks(dt);
     }
 });
 
@@ -73,6 +83,7 @@ var HelloWorldScene = cc.Scene.extend({
     onEnter:function () {
         this._super();
         var layer = new HelloWorldLayer();
+        currentLayer = layer;
         this.addChild(layer);
     }
 });
