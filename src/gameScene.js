@@ -73,6 +73,7 @@ var GameSceneLayer = cc.Layer.extend({
                     {
                         target.temp_88_pressed = true;
                         target.blue.setStatus(STATUS.ROLL);
+                        target.blue.aimer.setVisible(true);
                         cc.log("Key " + keyCode.toString() + " was pressed!");
                     }
                 }
@@ -91,6 +92,7 @@ var GameSceneLayer = cc.Layer.extend({
                     {
                         target.temp_191_pressed = true;
                         target.red.setStatus(STATUS.ROLL);
+                        target.red.aimer.setVisible(true);
                         cc.log("Key " + keyCode.toString() + " was pressed!");
                     }
                 }
@@ -113,6 +115,7 @@ var GameSceneLayer = cc.Layer.extend({
                     {
                         target.temp_88_pressed = false;
                         target.blue.setStatus(STATUS.MOVE);
+                        target.blue.aimer.setVisible(false);
                         cc.log("Key " + keyCode.toString() + " was released!");
                     }
                 }
@@ -132,6 +135,7 @@ var GameSceneLayer = cc.Layer.extend({
                     {
                         target.temp_191_pressed = false;
                         target.red.setStatus(STATUS.MOVE);
+                        target.red.aimer.setVisible(false);
                         cc.log("Key " + keyCode.toString() + " was released!");
                     }
                 }

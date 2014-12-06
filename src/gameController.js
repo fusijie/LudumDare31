@@ -8,6 +8,7 @@ GameController = function(blue, red){
     };
     this.borderCross = function(dt)
     {
+        //border cross.
         var blue_pos = this.blue.getPosition();
         if(blue_pos.x<0)
         {
@@ -43,6 +44,8 @@ GameController = function(blue, red){
         {
             this.red.setPositionY(0);
         }
+
+        //check collision
     }
 
 };

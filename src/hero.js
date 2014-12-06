@@ -2,9 +2,9 @@
  * Created by Jacky on 14/12/6.
  */
 
-var CONST_MOVE_SPEED = 50;
-var CONST_INCREASE_BASE_ANGEL = 1;
-var CONST_INCREASE_TOWER_ANGEL = 3;
+var CONST_MOVE_SPEED = 80;
+var CONST_INCREASE_BASE_ANGEL = 3;
+var CONST_INCREASE_TOWER_ANGEL = 5;
 var STATUS =  {IDLE: "idle", MOVE: "move", ROLL: "roll", SHOOT: "shoot", DEAD: "dead", WIN: "win"};
 
 var Hero = cc.Node.extend({
@@ -53,6 +53,7 @@ var Hero = cc.Node.extend({
 
         this.aimer = new cc.Sprite(aimerFrameName);
         this.addChild(this.aimer,3);
+        this.aimer.setVisible(false);
 
         this.setPosition(this.initPos);
         this.tower.setRotation(this.tower_angel);
