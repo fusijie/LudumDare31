@@ -2,9 +2,9 @@
  * Created by Jacky on 14/12/6.
  */
 
-var CONST_MOVE_SPEED = 80;
+var CONST_MOVE_SPEED = 100;
 var CONST_INCREASE_BASE_ANGEL = 3;
-var CONST_INCREASE_TOWER_ANGEL = 5;
+var CONST_INCREASE_TOWER_ANGEL = 3;
 var STATUS =  {IDLE: "idle", MOVE: "move", ROLL: "roll", SHOOT: "shoot", DEAD: "dead", WIN: "win"};
 
 var Hero = cc.Node.extend({
@@ -16,6 +16,8 @@ var Hero = cc.Node.extend({
     base_angel:0,
     tower_angel: 0,
     status: STATUS.IDLE,
+    isClockWise: true,
+    isCDing: false,
     ctor: function(colortype) {
         this._super();
 
@@ -54,6 +56,7 @@ var Hero = cc.Node.extend({
         this.aimer = new cc.Sprite(aimerFrameName);
         this.addChild(this.aimer,3);
         this.aimer.setVisible(false);
+        this.aimer.setScale(1.5);
 
         this.setPosition(this.initPos);
         this.tower.setRotation(this.tower_angel);
@@ -76,12 +79,20 @@ var Hero = cc.Node.extend({
         this.setPosition(new_pos);
     },
     updateTowerRoll: function(dt){
-        var new_angel = (this.tower_angel + CONST_INCREASE_TOWER_ANGEL)%360;
+        var new_angel;
+        if(this.isClockWise)
+            new_angel = (this.tower_angel + CONST_INCREASE_TOWER_ANGEL)%360;
+        else
+            new_angel = (this.tower_angel - CONST_INCREASE_BASE_ANGEL)%360;
         this.tower_angel = new_angel;
         this.tower.setRotation(new_angel);
     },
     updateBaseRoll: function(dt){
-        var new_angel = (this.base_angel + CONST_INCREASE_BASE_ANGEL)%360;
+        var new_angel;
+        if(this.isClockWise)
+            new_angel = (this.base_angel + CONST_INCREASE_BASE_ANGEL)%360;
+        else
+            new_angel = (this.base_angel - CONST_INCREASE_BASE_ANGEL)%360;
         this.base_angel = new_angel;
         this.aimer.setRotation(new_angel);
     },
@@ -95,10 +106,11 @@ var Hero = cc.Node.extend({
                 break;
             case STATUS.ROLL:
                 this.updateBaseRoll(dt);
+                this.updateTowerRoll(dt);
                 this.updateMove(dt);
                 break;
             case STATUS.SHOOT:
-                this.updateTowerRoll(dt);
+                //this.updateTowerRoll(dt);
                 break;
         }
     }
