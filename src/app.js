@@ -32,47 +32,22 @@ var HelloWorldLayer = cc.Layer.extend({
         menu.y = 0;
         this.addChild(menu, 1);
 
-        /////////////////////////////
-        // 3. add your codes below...
-        // add a label shows "Hello World"
-        // create and initialize a label
-        var helloLabel = new cc.LabelTTF("Hello World", "Arial", 38);
-        // position the label on the center of the screen
-        helloLabel.x = size.width / 2;
-        helloLabel.y = 0;
-        // add the label as a child to this layer
-        this.addChild(helloLabel, 5);
-
         // add "HelloWorld" splash screen"
         this.sprite = new cc.Sprite(res.HelloWorld_png);
         this.sprite.attr({
             x: size.width / 2,
             y: size.height / 2,
-            scale: 0.5,
-            rotation: 180
         });
         this.addChild(this.sprite, 0);
 
-        this.sprite.runAction(
-            cc.sequence(
-                cc.rotateTo(2, 0),
-                cc.scaleTo(2, 1, 1)
-            )
-        );
-        helloLabel.runAction(
-            cc.spawn(
-                cc.moveBy(2.5, cc.p(0, size.height - 40)),
-                cc.tintTo(2.5,255,125,0)
-            )
-        );
-
-        this.schedule(this.loop, 3);
+        this.schedule(this.loop, 1);
         this.scheduleUpdate();
 
         return true;
     },
     loop: function(){
-        bulletController.spawnBullet(1, cc.p(cc.winSize.width/2, cc.winSize.height/2), cc.PI+(cc.random0To1()*10));
+        bulletController.spawnBullet(1, cc.p(cc.winSize.width/4, cc.winSize.height/4), cc.PI+(cc.random0To1()*10));
+        bulletController.spawnBullet(2, cc.p(cc.winSize.width*3/4, cc.winSize.height*3/4), cc.PI+(cc.random0To1()*10));
     },
     update: function(dt){
         bulletController.attacks(dt);
