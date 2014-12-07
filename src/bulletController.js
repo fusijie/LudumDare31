@@ -29,6 +29,7 @@ var bulletController = {
             obj1.speed.y = (obj1Momentum.y + obj2Momentum.y) / obj1.mass;
             obj2.speed.y = (obj2Momentum.y + obj1Momentum.y) / obj2.mass;
         }
+        audioEngine.playEffect(res.audio_collision);
     },
     proccessArray: function(bullets, mask, dt){
         for(var i = bullets.length-1; i >= 0; i--){
@@ -40,7 +41,6 @@ var bulletController = {
                 var bulletX =  bulletsX[k];
                 var dist = cc.pDistance(bullet.getPosition(), bulletX.getPosition());
                 if(dist < bullet.radius + bulletX.radius){
-                    //bullet.onCollide(bulletX);
                     this.conservationOfMomentum(bullet, bulletX);
                 }
             }
@@ -128,11 +128,8 @@ var BasicBullet = cc.Sprite.extend({
         this.runAction(cc.sequence(cc.fadeOut(1), cc.removeSelf()));
     },
     onCollide: function(target){
-        cc.log("xxxxx");
         target.losslife();
-        //this.hurtEffect(target);
-        //this.playHitAudio();
-        //target.hurt(this);
+        audioEngine.playEffect(res.audio_explosion);
     },
     onUpdate: function(dt){
         var selfPos = this.getPosition();
@@ -175,8 +172,9 @@ BasicBullet.create = function(mask, pos, angle){
     {
         bulletController.bulletsB.push(sprite);
     }
-    currentLayer.addChild(sprite, 1)
+    currentLayer.addChild(sprite, 1);
 
+    audioEngine.playEffect(res.audio_shoot_1);
     return sprite;
 };
 

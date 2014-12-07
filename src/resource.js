@@ -1,3 +1,5 @@
+var audioEngine = cc.audioEngine;
+
 var res = {
     blue_aimer : "res/blue_aimer.png",
     blue_base : "res/blue_base.png",
@@ -22,6 +24,11 @@ var res = {
     item_cdhalf: "res/itemCDHalf.png",
     item_speed2: "res/itemSpeed2.png",
     life_frame: "res/life_frame.png",
+    audio_collision: "res/collision1.wav",
+    audio_shoot_1: "res/lasershoot2.wav",
+    audio_explosion: "res/explosion1.wav",
+    audio_item_show: "res/itemshow.wav",
+    audio_item_taken: "res/itemtaken.wav",
     star1: "res/star1.png",
     star2: "res/star2.png",
     star3: "res/star3.png"
