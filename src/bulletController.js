@@ -3,6 +3,7 @@
  */
 var currentLayer;
 var BULLET_SPEED = 300;
+var BULLET_RADUIS = 20;
 
 var bulletController = {
     bulletsA: [],
@@ -114,7 +115,7 @@ var BasicBullet = cc.Sprite.extend({
         this.speed = {x: BULLET_SPEED, y: BULLET_SPEED}; //traveling speed
         this.duration = 10;
         this.curDuration = 0;
-        this.radius = 20;
+        this.radius = BULLET_RADUIS;
         this.mass = 5;
     },
     onTimeOut: function(){

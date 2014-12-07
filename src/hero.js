@@ -92,7 +92,7 @@ var Hero = cc.Node.extend({
             if (this.colortype == g_ColorType.blue) mask = 1;
             else mask = 2;
             var angle = cc.degreesToRadians(this.tower_angel);
-            var pos = cc.pRotateByAngle(cc.p(50,0), cc.p(0,0), cc.PI/2 - angle);
+            var pos = cc.pRotateByAngle(cc.p(BULLET_RADUIS + this.radius, 0), cc.p(0,0), cc.PI/2 - angle);
             pos = cc.pAdd(this.getPosition(), pos);
             bulletController.spawnBullet(1, mask, pos, angle);
             this.lastCDTime = CONST_CD_TIME;
