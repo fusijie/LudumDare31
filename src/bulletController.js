@@ -79,8 +79,9 @@ var bulletController = {
     }
 };
 
-bulletController.changeAngle = function(mask, pos){
+bulletController.changeAngle = function(mask){
     var bulletsX = mask === 1? this.bulletsA: this.bulletsB;
+    var pos = mask === 1? currentLayer.blue.getPosition(): currentLayer.red.getPosition();
     for(var k = bulletsX.length-1; k >= 0; k--) {
         var bullet =  bulletsX[k];
         angle = cc.pToAngle(cc.pSub(pos, bullet.getPosition()));
@@ -94,7 +95,7 @@ bulletController.weakBullet = function(mask){
     var bulletsX = mask === 1? this.bulletsA: this.bulletsB;
     for(var k = bulletsX.length-1; k >= 0; k--) {
         var bullet =  bulletsX[k];
-        bullet.curDuration += bullet.curDuration/2;
+        bullet.curDuration += bullet.duration/2;
     }
 };
 
