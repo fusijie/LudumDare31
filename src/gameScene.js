@@ -81,7 +81,7 @@ var GameSceneLayer = cc.Layer.extend({
                         target.temp_90_pressed = true;
                         target.blue.setStatus(STATUS.ROLL);
                         target.blue.aimer.setVisible(true);
-                        cc.log("Key " + keyCode.toString() + " was pressed!");
+                        //cc.log("Key " + keyCode.toString() + " was pressed!");
                     }
                 }
                 else if(keyCode == 88)
@@ -90,7 +90,7 @@ var GameSceneLayer = cc.Layer.extend({
                     {
                         target.temp_88_pressed = true;
                         if(!target.blue.isCDing) target.blue.shoot();
-                        cc.log("Key " + keyCode.toString() + " was pressed!");
+                        //cc.log("Key " + keyCode.toString() + " was pressed!");
                     }
                 }
                 else if(keyCode == 190 && !g_IsAIEnable)
@@ -100,7 +100,7 @@ var GameSceneLayer = cc.Layer.extend({
                         target.temp_190_pressed = true;
                         target.red.setStatus(STATUS.ROLL);
                         target.red.aimer.setVisible(true);
-                        cc.log("Key " + keyCode.toString() + " was pressed!");
+                        //cc.log("Key " + keyCode.toString() + " was pressed!");
                     }
                 }
                 else if(keyCode == 191 && !g_IsAIEnable)
@@ -109,7 +109,7 @@ var GameSceneLayer = cc.Layer.extend({
                     {
                         target.temp_191_pressed = true;
                         if(!target.red.isCDing) target.red.shoot();
-                        cc.log("Key " + keyCode.toString() + " was pressed!");
+                        //cc.log("Key " + keyCode.toString() + " was pressed!");
                     }
                 }
             },
@@ -123,7 +123,7 @@ var GameSceneLayer = cc.Layer.extend({
                         target.blue.isClockWise = !target.blue.isClockWise;
                         target.blue.setStatus(STATUS.MOVE);
                         target.blue.aimer.setVisible(false);
-                        cc.log("Key " + keyCode.toString() + " was released!");
+                        //cc.log("Key " + keyCode.toString() + " was released!");
                     }
                 }
                 else if(keyCode == 88)
@@ -132,7 +132,7 @@ var GameSceneLayer = cc.Layer.extend({
                     {
                         target.temp_88_pressed = false;
                         target.blue.setStatus(STATUS.MOVE);
-                        cc.log("Key " + keyCode.toString() + " was released!");
+                        //cc.log("Key " + keyCode.toString() + " was released!");
                     }
                 }
                 else if(keyCode == 190 && !g_IsAIEnable)
@@ -143,7 +143,7 @@ var GameSceneLayer = cc.Layer.extend({
                         target.red.isClockWise = !target.red.isClockWise;
                         target.red.setStatus(STATUS.MOVE);
                         target.red.aimer.setVisible(false);
-                        cc.log("Key " + keyCode.toString() + " was released!");
+                        //cc.log("Key " + keyCode.toString() + " was released!");
                     }
                 }
                 else if(keyCode == 191 && !g_IsAIEnable)
@@ -152,7 +152,7 @@ var GameSceneLayer = cc.Layer.extend({
                     {
                         target.temp_191_pressed = false;
                         target.red.setStatus(STATUS.MOVE);
-                        cc.log("Key " + keyCode.toString() + " was released!");
+                        //cc.log("Key " + keyCode.toString() + " was released!");
                     }
                 }
             }
