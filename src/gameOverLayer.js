@@ -16,7 +16,7 @@ var GameOverLayer = cc.Layer.extend({
         baselayer.runAction(cc.moveBy(0.8,cc.p(0,-cc.winSize.height/2)).easing(cc.easeBackOut()));
 
         var winner = new Hero(filename);
-        winner.setPosition(baselayer.getContentSize().width*3/4, baselayer.getContentSize().height*3/4);
+        winner.setPosition(baselayer.getContentSize().width/2, baselayer.getContentSize().height/2);
         baselayer.addChild(winner);
 
         var winnerlabel = new cc.LabelTTF("Winner", "", 64);
@@ -24,8 +24,13 @@ var GameOverLayer = cc.Layer.extend({
         baselayer.addChild(winnerlabel);
 
         //add refresh tip
-        var refreshlabel = new cc.LabelTTF("Please press F5 to restart game", "", 32);
-        refreshlabel.setPosition(baselayer.getContentSize().width/2,baselayer.getContentSize().height/2);
+        var refreshlabel = new cc.LabelTTF("Please press            to restart game", "", 32);
+        refreshlabel.setPosition(baselayer.getContentSize().width/2,baselayer.getContentSize().height/4);
         baselayer.addChild(refreshlabel);
+
+        var refreshlabel1 = new cc.LabelTTF("F5", "", 40);
+        refreshlabel1.setColor(cc.color(0, 255, 0));
+        refreshlabel1.setPosition(baselayer.getContentSize().width/2,baselayer.getContentSize().height/4);
+        baselayer.addChild(refreshlabel1);
     }
 });

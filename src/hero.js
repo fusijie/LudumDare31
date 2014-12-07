@@ -202,6 +202,7 @@ var Hero = cc.Node.extend({
         if(this.life <= 0 )
         {
             //gameover;
+            this.status = STATUS.DEAD;
             currentLayer.unscheduleUpdate();
             var filename = this.colortype == g_ColorType.blue ?g_ColorType.red: g_ColorType.blue;
             var gameoverLayer = new GameOverLayer(filename);
