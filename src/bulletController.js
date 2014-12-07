@@ -102,6 +102,14 @@ bulletController.changeAngle = function(mask, pos){
     }
 };
 
+bulletController.weakBullet = function(mask){
+    var bulletsX = mask === 1? this.bulletsA: this.bulletsB;
+    for(var k = bulletsX.length-1; k >= 0; k--) {
+        var bullet =  bulletsX[k];
+        bullet.curDuration += bullet.curDuration/2;
+    }
+};
+
 
 bulletController.spawnBullet = function (type, mask, pos, angle) {
     if(type === 1){
@@ -135,6 +143,7 @@ var BasicBullet = cc.Sprite.extend({
         var nextPos = cc.p(selfPos.x + this.speed.x*dt, selfPos.y + this.speed.y*dt);
         this.setPosition(nextPos);
         this.checkBorder();
+        this.setOpacity(255*(1-this.curDuration/this.duration));
     },
     checkBorder: function() {
         var obj_pos = this.getPosition();
