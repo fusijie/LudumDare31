@@ -20,7 +20,10 @@ var res = {
     item_hpplus: "res/itemHpPlus.png",
     item_cdhalf: "res/itemCDHalf.png",
     item_speed2: "res/itemSpeed2.png",
-    life_frame: "res/life_frame.png"
+    life_frame: "res/life_frame.png",
+    star1: "res/star1.png",
+    star2: "res/star2.png",
+    star3: "res/star3.png"
 };
 
 var g_resources = [];

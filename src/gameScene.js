@@ -105,6 +105,11 @@ var GameSceneLayer = cc.Layer.extend({
             ic.update(dt);
         },0);
 
+        //add Star
+        this.schedule(function(dt){
+            cc.log("yyy");
+        },3);
+
         this.initKeyBoardControl();
         return true;
     },
