@@ -59,7 +59,6 @@ var GameSceneLayer = cc.Layer.extend({
             });
             this.addChild(blue_life,6);
             this.blue_lifes[i] = blue_life;
-
             var red_life = new cc.Sprite(res.red_life);
             red_life.attr({
                 x:cc.winSize.width - 25,
@@ -232,7 +231,13 @@ var GameSceneLayer = cc.Layer.extend({
                     this.blue_life_count --;
                     cc.log(this.blue_life_count);
                     if(this.blue_life_count>=0)
-                        this.blue_lifes[4 - this.blue_life_count].setTexture(res.life_frame);
+                    {
+                        //this.blue_lifes[4 - this.blue_life_count].setTexture(res.life_frame);
+                        var t1 = cc.moveBy(0.1, cc.p(-10, 0));
+                        //var tempAction = cc.sequence(t1, t1.reverse());
+                        var jumpAction = cc.jumpBy(1, cc.p(100, 0),  20, 3);
+                        this.blue_lifes[4 - this.blue_life_count].runAction(cc.sequence(jumpAction, cc.fadeOut(1), cc.removeSelf()));
+                    }
 
                 }
                 else if(hero_type == g_ColorType.red)
