@@ -16,7 +16,6 @@ ItemController = function(){
             var item = new Item(random_item_index);
             currentLayer.addChild(item,100);
             this.scheduleTime = CONST_ITEM_TIME*(1+CONST_ITEM_RANDOM_FACTOR*Math.random());
-            cc.log(this.scheduleTime);
         }
     };
 

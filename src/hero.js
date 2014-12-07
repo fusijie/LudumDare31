@@ -6,6 +6,7 @@ var CONST_MOVE_SPEED = 100;
 var CONST_INCREASE_BASE_ANGEL = 3;
 var CONST_INCREASE_TOWER_ANGEL = 3;
 var CONST_CD_TIME = 3;
+var CONST_TOWER_TO_BASE_DIS = 20;
 var STATUS =  {IDLE: "idle", MOVE: "move", ROLL: "roll", SHOOT: "shoot", DEAD: "dead", WIN: "win"};
 
 var Hero = cc.Node.extend({
@@ -90,7 +91,11 @@ var Hero = cc.Node.extend({
             var mask;
             if (this.colortype == g_ColorType.blue) mask = 1;
             else mask = 2;
-            bulletController.spawnBullet(1, mask, this.getPosition(), cc.degreesToRadians(this.tower_angel));
+            var bulletangel = cc.degreesToRadians(this.tower_angel);
+            var heropos = this.getPosition();
+            var bulletpos = cc.p(heropos.x + CONST_TOWER_TO_BASE_DIS * Math.cos(bulletangel),heropos.y + CONST_TOWER_TO_BASE_DIS * Math.sin(bulletangel));
+            cc.log(bulletpos.x,bulletpos.y);
+            bulletController.spawnBullet(1, mask, bulletpos, cc.degreesToRadians(this.tower_angel));
             this.lastCDTime = CONST_CD_TIME;
             this.isCDing = true;
         }
@@ -128,6 +133,14 @@ var Hero = cc.Node.extend({
             if(this.lastCDTime<=0) {
                 this.isCDing = false;
                 this.lastCDTime = 0;
+                this.base_light.setOpacity(255);
+                this.tower_light.setOpacity(255);
+            }
+            else
+            {
+                var opc = (CONST_CD_TIME - this.lastCDTime)/CONST_CD_TIME*255;
+                this.base_light.setOpacity(opc);
+                this.tower_light.setOpacity(opc);
             }
         }
         switch(this.status)
