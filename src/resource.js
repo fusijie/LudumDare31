@@ -35,7 +35,8 @@ var res = {
     key_dot: "res/key_dot.png",
     key_slash: "res/key_slash.png",
     key_X: "res/key_X.png",
-    key_Z: "res/key_Z.png"
+    key_Z: "res/key_Z.png",
+    logo_png: "res/logo.png"
 };
 
 var g_resources = [];
