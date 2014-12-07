@@ -233,8 +233,6 @@ var GameSceneLayer = cc.Layer.extend({
                     if(this.blue_life_count>=0)
                     {
                         //this.blue_lifes[4 - this.blue_life_count].setTexture(res.life_frame);
-                        var t1 = cc.moveBy(0.1, cc.p(-10, 0));
-                        //var tempAction = cc.sequence(t1, t1.reverse());
                         var jumpAction = cc.jumpBy(1, cc.p(100, 0),  20, 3);
                         this.blue_lifes[4 - this.blue_life_count].runAction(cc.sequence(jumpAction, cc.fadeOut(1), cc.removeSelf()));
                     }
@@ -243,8 +241,11 @@ var GameSceneLayer = cc.Layer.extend({
                 else if(hero_type == g_ColorType.red)
                 {
                     this.red_life_count --;
-                    if(this.red_life_count>=0)
-                        this.red_lifes[4 - this.red_life_count].setTexture(res.life_frame);
+                    if(this.red_life_count>=0){
+                        var jumpAction = cc.jumpBy(1, cc.p(-100, 0),  20, 3);
+                        this.red_lifes[4 - this.red_life_count].runAction(cc.sequence(jumpAction, cc.fadeOut(1), cc.removeSelf()));
+                        //this.red_lifes[4 - this.red_life_count].setTexture(res.life_frame);
+                    }
                 }
             }.bind(this)
 
