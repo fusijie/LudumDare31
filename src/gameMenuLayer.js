@@ -48,7 +48,9 @@ var GameMenuLayer = cc.Layer.extend({
         baselayer.addChild(logo);
         //add start
         var startlabel = new cc.LabelTTF("Start", "", 32);
+        startlabel.setColor(cc.color(0, 255, 0));
         var startitem = new cc.MenuItemLabel(startlabel,function(pSender){
+            audioEngine.playEffect(res.audio_item_taken);
             this.runAction(cc.sequence(cc.moveBy(0.8,cc.p(0,cc.winSize.height*3/4)).easing(cc.easeBackOut()),cc.callFunc(function(sender){
                 currentLayer.onStartGame();
             })));
