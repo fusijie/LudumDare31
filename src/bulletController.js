@@ -2,6 +2,7 @@
  * Created by calf on 14/12/6.
  */
 var currentLayer;
+var BULLET_SPEED = 300;
 
 var bulletController = {
     bulletsA: [],
@@ -10,7 +11,7 @@ var bulletController = {
         var obj1Momentum = {x:obj1.speed.x * obj1.mass, y:obj1.speed.y * obj1.mass};
         var obj2Momentum = {x:obj2.speed.x * obj2.mass, y:obj2.speed.y * obj2.mass};
 
-        if(obj1.speed.x * obj2.speed.x > 0){
+        if(obj1Momentum.x * obj2Momentum.x > 0){
             obj1.speed.x = (obj1Momentum.x - obj2Momentum.x) / obj1.mass;
             obj2.speed.x = (obj2Momentum.x - obj1Momentum.x) / obj2.mass;
         }
@@ -19,7 +20,7 @@ var bulletController = {
             obj2.speed.x = (obj2Momentum.x + obj1Momentum.x) / obj2.mass;
         }
 
-        if(obj1.speed.y * obj2.speed.y > 0){
+        if(obj1Momentum.y * obj2Momentum.y > 0){
             obj1.speed.y = (obj1Momentum.y - obj2Momentum.y) / obj1.mass;
             obj2.speed.y = (obj2Momentum.y - obj1Momentum.y) / obj2.mass;
         }
@@ -38,7 +39,7 @@ var bulletController = {
                 var bulletX =  bulletsX[k];
                 var dist = cc.pDistance(bullet.getPosition(), bulletX.getPosition());
                 if(dist < bullet.radius + bulletX.radius){
-                    bullet.onCollide(bulletX);
+                    //bullet.onCollide(bulletX);
                     this.conservationOfMomentum(bullet, bulletX);
                 }
             }
@@ -48,8 +49,6 @@ var bulletController = {
                 var dist = cc.pDistance(bullet.getPosition(), target.getPosition());
                 if (dist < bullet.radius  + target.radius) {
                     bullet.onCollide(target);
-
-                    //this.conservationOfMomentum(target, bullet);
                     bullet.curDuration = bullet.curDuration + 1;
 
                 }
@@ -59,8 +58,6 @@ var bulletController = {
                 var dist = cc.pDistance(bullet.getPosition(), target.getPosition());
                 if (dist < bullet.radius + target.radius) {
                     bullet.onCollide(target);
-
-                    //this.conservationOfMomentum(target, bullet);
                     bullet.curDuration = bullet.curDuration + 1;
                 }
             }
@@ -87,8 +84,8 @@ bulletController.changeAngle = function(mask, pos){
         var bullet =  bulletsX[k];
         angle = cc.pToAngle(cc.pSub(pos, bullet.getPosition()));
         angle = cc.PI/2 - angle;
-        bullet.speed.x = 50 *Math.sin(angle);
-        bullet.speed.y = 50 *Math.cos(angle);
+        bullet.speed.x = BULLET_SPEED *Math.sin(angle);
+        bullet.speed.y = BULLET_SPEED *Math.cos(angle);
     }
 };
 
@@ -114,7 +111,7 @@ var BasicBullet = cc.Sprite.extend({
     ctor: function(){
         this._super(res.bubble_png);
         this.mask = 0;  //1 is Role A, 2 is Role B, 0 is nobody
-        this.speed = {x: 50, y: 50}; //traveling speed
+        this.speed = {x: BULLET_SPEED, y: BULLET_SPEED}; //traveling speed
         this.duration = 10;
         this.curDuration = 0;
         this.radius = 20;
