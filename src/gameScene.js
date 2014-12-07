@@ -61,9 +61,9 @@ var GameSceneLayer = cc.Layer.extend({
         }
 
         //add Custom Event
-        var lifelistener = cc.EventListener.create({
+        var lifeminuslistener = cc.EventListener.create({
             event: cc.EventListener.CUSTOM,
-            eventName: "life_event",
+            eventName: "lifeminus_event",
             callback: function(event){
                 var hero_type = event.getUserData();
                 if(hero_type == g_ColorType.blue)
@@ -83,7 +83,30 @@ var GameSceneLayer = cc.Layer.extend({
             }.bind(this)
 
         });
-        cc.eventManager.addListener(lifelistener, 1);
+        cc.eventManager.addListener(lifeminuslistener, 1);
+
+        var lifepluslistener = cc.EventListener.create({
+            event: cc.EventListener.CUSTOM,
+            eventName: "lifeplus_event",
+            callback: function(event){
+                var hero_type = event.getUserData();
+                if(hero_type == g_ColorType.blue)
+                {
+                    this.blue_life_count ++;
+                    cc.log(this.blue_life_count);
+                    this.blue_lifes[5 - this.blue_life_count].setTexture(res.blue_life);
+
+                }
+                else if(hero_type == g_ColorType.red)
+                {
+                    this.red_life_count ++;
+                    cc.log(this.red_life_count);
+                    this.red_lifes[5 - this.red_life_count].setTexture(res.red_life);
+                }
+            }.bind(this)
+
+        });
+        cc.eventManager.addListener(lifepluslistener, 1);
 
         //after tips.
         this.blue.setStatus(STATUS.MOVE);

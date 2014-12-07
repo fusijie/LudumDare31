@@ -4,7 +4,7 @@
 
 var STYLE = {rush:0,disapper:1,sbullet:2,hpplus:3,cdhalf:4,speed2:5};
 
-var CONST_LIFE = 8;
+var CONST_ITEMLIFE = 8;
 var CONST_BLINK_TIME = 2;
 
 var Item = cc.Sprite.extend({
@@ -40,8 +40,8 @@ var Item = cc.Sprite.extend({
         this.style = style;
 
         this.attr({
-            x: cc.winSize.width * Math.random(),
-            y: cc.winSize.height * Math.random()
+            x: cc.winSize.width * Math.ceil(Math.random()*9)*0.1,
+            y: cc.winSize.height * Math.ceil(Math.random()*9)*0.1
         });
 
         g_ItemPool.push(this);
@@ -51,12 +51,12 @@ var Item = cc.Sprite.extend({
     update: function(dt)
     {
         this.curlifetime += dt;
-        if(this.curlifetime > CONST_LIFE - CONST_BLINK_TIME && !this.isBlinking)
+        if(this.curlifetime > CONST_ITEMLIFE - CONST_BLINK_TIME && !this.isBlinking)
         {
             this.runAction(cc.blink(CONST_BLINK_TIME,5));
             this.isBlinking = true;
         }
-        else if(this.curlifetime > CONST_LIFE)
+        else if(this.curlifetime > CONST_ITEMLIFE)
         {
             g_ItemPool.splice(g_ItemPool.indexOf(this),1);
             this.removeFromParent();

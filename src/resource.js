@@ -1,5 +1,4 @@
 var res = {
-    bubble_png : "res/bubble.png",
     blue_aimer : "res/blue_aimer.png",
     blue_base : "res/blue_base.png",
     blue_baselight: "res/blue_baselight.png",

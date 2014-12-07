@@ -189,11 +189,14 @@ var Hero = cc.Node.extend({
         if(this.life != CONST_LIFE)
         {
             this.life ++;
+            var event = new cc.EventCustom("lifeplus_event");
+            event.setUserData(this.colortype);
+            cc.eventManager.dispatchEvent(event);
         }
     },
     losslife: function(){
         this.life --;
-        var event = new cc.EventCustom("life_event");
+        var event = new cc.EventCustom("lifeminus_event");
         event.setUserData(this.colortype);
         cc.eventManager.dispatchEvent(event);
         if(this.life <= 0 )
