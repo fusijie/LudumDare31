@@ -17,6 +17,12 @@ var GameSceneLayer = cc.Layer.extend({
     temp_88_pressed: false,
     temp_190_pressed: false,
     temp_191_pressed: false,
+    key_z: null,
+    key_x: null,
+    key_dot: null,
+    key_slash: null,
+    controllabel: null,
+    shootlabel: null,
     ctor:function () {
 
         this._super();
@@ -63,10 +69,54 @@ var GameSceneLayer = cc.Layer.extend({
             this.red_lifes[i] = red_life;
         }
 
+        this.initIntroduce(7);
         this.menu_layer = new GameMenuLayer();
         this.addChild(this.menu_layer,100);
 
         return true;
+    },
+    initIntroduce: function(tag){
+        //add logo and key tip
+        this.key_z = new cc.Sprite(res.key_Z);
+        this.key_z.setPosition(cc.p(200, cc.winSize.height/5));
+        this.addChild(this.key_z, tag);
+
+        this.key_x = new cc.Sprite(res.key_X);
+        this.key_x.setPosition(cc.p(200, cc.winSize.height/3));
+        this.addChild(this.key_x, tag);
+
+        this.controllabel = new cc.LabelTTF("← Control Move And Direction →", "", 15);
+        this.controllabel.setPosition(cc.p(cc.winSize.width/2, cc.winSize.height/5));
+        this.controllabel.setColor(cc.color(100,100,100,100));
+        this.addChild(this.controllabel, tag);
+
+        this.key_dot = new cc.Sprite(res.key_dot);
+        this.key_dot.setPosition(cc.p(cc.winSize.width-200, cc.winSize.height/5));
+        this.addChild(this.key_dot, tag);
+
+        this.key_slash = new cc.Sprite(res.key_slash);
+        this.key_slash.setPosition(cc.p(cc.winSize.width-200, cc.winSize.height/3));
+        this.addChild(this.key_slash, tag);
+
+        this.shootlabel = new cc.LabelTTF("← Click To Shoot →", "", 15);
+        this.shootlabel.setPosition(cc.p(cc.winSize.width/2, cc.winSize.height/3));
+        this.shootlabel.setColor(cc.color(100,100,100,100));
+        this.addChild(this.shootlabel, tag);
+    },
+    makeIntroduceEasy: function(){
+        this.shootlabel.setString("← Press Keyboard, Please →");
+        this.shootlabel.setColor(cc.color(255,0,0,255));
+
+        var keyWidth = this.key_x.getContentSize().width/2;
+        var pos = this.key_x.getPosition();
+        this.key_z.runAction(cc.moveTo(2, cc.p(pos.x - keyWidth*3/5, pos.y)));
+        this.key_x.runAction(cc.moveBy(1, cc.p(keyWidth*3/5, 0)));
+
+        pos = this.key_slash.getPosition();
+        this.key_dot.runAction(cc.moveTo(2, cc.p(pos.x - keyWidth*3/5, pos.y)));
+        this.key_slash.runAction(cc.moveBy(1, cc.p(keyWidth*3/5, 0)));
+
+        this.controllabel.runAction(cc.sequence(cc.fadeOut(1), cc.removeSelf()));
     },
     initKeyBoardControl: function()
     {
@@ -74,10 +124,13 @@ var GameSceneLayer = cc.Layer.extend({
             event: cc.EventListener.KEYBOARD,
             onKeyPressed:  function(keyCode, event){
                 var target = event.getCurrentTarget();
+                if (target.shootlabel.visible) target.shootlabel.runAction(cc.sequence(cc.fadeOut(5), cc.removeSelf()));
                 if(keyCode == 90)
                 {
                     if(!target.temp_90_pressed && !target.temp_88_pressed)
                     {
+                        if(target.key_z.visible) target.key_z.runAction(cc.sequence(cc.fadeOut(2), cc.removeSelf()));
+
                         target.temp_90_pressed = true;
                         target.blue.setStatus(STATUS.ROLL);
                         target.blue.aimer.setVisible(true);
@@ -88,6 +141,8 @@ var GameSceneLayer = cc.Layer.extend({
                 {
                     if(!target.temp_88_pressed && !target.temp_90_pressed)
                     {
+                        if(target.key_x.visible) target.key_x.runAction(cc.sequence(cc.fadeOut(2), cc.removeSelf()));
+
                         target.temp_88_pressed = true;
                         if(!target.blue.isCDing) target.blue.shoot();
                         //cc.log("Key " + keyCode.toString() + " was pressed!");
@@ -97,6 +152,8 @@ var GameSceneLayer = cc.Layer.extend({
                 {
                     if(!target.temp_190_pressed && !target.temp_191_pressed)
                     {
+                        if(target.key_dot.visible) target.key_dot.runAction(cc.sequence(cc.fadeOut(2), cc.removeSelf()));
+
                         target.temp_190_pressed = true;
                         target.red.setStatus(STATUS.ROLL);
                         target.red.aimer.setVisible(true);
@@ -107,6 +164,8 @@ var GameSceneLayer = cc.Layer.extend({
                 {
                     if(!target.temp_191_pressed && !target.temp_190_pressed)
                     {
+                        if(target.key_slash.visible) target.key_slash.runAction(cc.sequence(cc.fadeOut(2), cc.removeSelf()));
+
                         target.temp_191_pressed = true;
                         if(!target.red.isCDing) target.red.shoot();
                         //cc.log("Key " + keyCode.toString() + " was pressed!");
@@ -160,6 +219,7 @@ var GameSceneLayer = cc.Layer.extend({
     },
     onStartGame: function()
     {
+        this.makeIntroduceEasy();
         this.menu_layer.removeFromParent();
         //add Custom Event
         var lifeminuslistener = cc.EventListener.create({

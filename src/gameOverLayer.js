@@ -16,7 +16,7 @@ var GameOverLayer = cc.Layer.extend({
         baselayer.runAction(cc.moveBy(0.8,cc.p(0,-cc.winSize.height/2)).easing(cc.easeBackOut()));
 
         var winner = new Hero(filename);
-        winner.setPosition(baselayer.getContentSize().width/2, baselayer.getContentSize().height*3/4);
+        winner.setPosition(baselayer.getContentSize().width*3/4, baselayer.getContentSize().height*3/4);
         baselayer.addChild(winner);
 
         var winnerlabel = new cc.LabelTTF("Winner", "", 64);
