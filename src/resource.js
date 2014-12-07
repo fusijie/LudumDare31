@@ -31,7 +31,11 @@ var res = {
     audio_item_taken: "res/itemtaken.wav",
     star1: "res/star1.png",
     star2: "res/star2.png",
-    star3: "res/star3.png"
+    star3: "res/star3.png",
+    key_dot: "res/key_dot.png",
+    key_slash: "res/key_slash.png",
+    key_X: "res/key_X.png",
+    key_Z: "res/key_Z.png"
 };
 
 var g_resources = [];
