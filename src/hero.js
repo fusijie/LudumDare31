@@ -24,7 +24,7 @@ var Hero = cc.Node.extend({
     tower_angel: 0,
     status: STATUS.IDLE,
     radius: 25,
-    mass: 100,
+    mass: 200,
     isClockWise: true,
     isCDing: false,
     lastCDTime: 0,
@@ -203,7 +203,8 @@ var Hero = cc.Node.extend({
         {
             //gameover;
             currentLayer.unscheduleUpdate();
-            var gameoverLayer = new GameOverLayer();
+            var filename = this.colortype == g_ColorType.blue ?g_ColorType.red: g_ColorType.blue;
+            var gameoverLayer = new GameOverLayer(filename);
             currentLayer.addChild(gameoverLayer,100);
         }
     }
