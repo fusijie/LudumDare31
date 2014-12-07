@@ -1,3 +1,5 @@
+var CONST_HERO_ITEM_MINDISTANCE = 50;
+
 GameController = function(blue, red){
     //if(blue == undefined || red == undefined) return;
 
@@ -6,6 +8,8 @@ GameController = function(blue, red){
     this.timetoexcuteAI = 0;
     this.blue_cur_pos;
     this.update = function(dt) {//TODO:要加入dt
+
+        //AI
         if(g_IsAIEnable)
         {
             this.timetoexcuteAI -= dt;
@@ -26,8 +30,10 @@ GameController = function(blue, red){
                 }
             }
         }
+
         this.borderCross(dt);
         this.checkHeroCollision(dt);
+        this.checkItemCollision(dt);
     };
     this.borderCross = function(dt)
     {
@@ -75,6 +81,26 @@ GameController = function(blue, red){
             this.red.setPosition(cc.pRotateByAngle(cc.pAdd(cc.p(-distance2,0),red_Pos),red_Pos,angel));
         }
     };
+    this.checkItemCollision = function(dt)
+    {
+        //blue
+        for(var index in g_ItemPool){
+            if(cc.pDistance(this.blue.getPosition(),g_ItemPool[index].getPosition()) < CONST_HERO_ITEM_MINDISTANCE){
+                g_ItemPool[index].setCollision(this.blue);
+                return;
+            }
+        }
+
+        //red
+        for(var index in g_ItemPool){
+            if(cc.pDistance(this.red.getPosition(),g_ItemPool[index].getPosition()) < CONST_HERO_ITEM_MINDISTANCE){
+                g_ItemPool[index].setCollision(this.red);
+                return;
+            }
+        }
+    };
+
+    //AI
     this.setAIEnable = function(isAIEnable)
     {
         g_IsAIEnable = isAIEnable;

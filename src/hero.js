@@ -6,12 +6,15 @@ var CONST_MOVE_SPEED = 100;
 var CONST_INCREASE_BASE_ANGEL = 3;
 var CONST_INCREASE_TOWER_ANGEL = 3;
 var CONST_CD_TIME = 3;
+var CONST_TOWER_TO_BASE_DIS = 20;
 var STATUS =  {IDLE: "idle", MOVE: "move", ROLL: "roll", SHOOT: "shoot", DEAD: "dead", WIN: "win"};
 
 var Hero = cc.Node.extend({
     colortype: null,
     base: null,
+    base_light: null,
     tower: null,
+    tower_light: null,
     aimer: null,
     initPos: null,
     base_angel:0,
@@ -29,12 +32,16 @@ var Hero = cc.Node.extend({
 
         //add entity
         var baseFrameName = "";
-        var aimerFrameName = "";
+        var baselightFrameName = "";
         var towerFramName = "";
+        var towerlightFrameName = "";
+        var aimerFrameName = "";
         if(this.colortype == g_ColorType.blue)
         {
             baseFrameName = res.blue_base;
+            baselightFrameName = res.blue_baselight;
             towerFramName = res.blue_tower;
+            towerlightFrameName = res.blue_towerlight;
             aimerFrameName = res.blue_aimer;
             this.initPos = cc.p(200,cc.winSize.height/2);
             this.tower_angel = -90;
@@ -43,7 +50,9 @@ var Hero = cc.Node.extend({
         else if(this.colortype == g_ColorType.red)
         {
             baseFrameName = res.red_base;
+            baselightFrameName = res.red_baselight;
             towerFramName = res.red_tower;
+            towerlightFrameName = res.red_towerlight;
             aimerFrameName = res.red_aimer;
             this.initPos = cc.p(cc.winSize.width-200, cc.winSize.height/2);
             this.tower_angel = -135;
@@ -54,16 +63,23 @@ var Hero = cc.Node.extend({
         this.base  = new cc.Sprite(baseFrameName);
         this.addChild(this.base,1);
 
+        this.base_light = new cc.Sprite(baselightFrameName);
+        this.addChild(this.base_light,2)
+
         this.tower = new cc.Sprite(towerFramName);
-        this.addChild(this.tower,2);
+        this.addChild(this.tower,3);
+
+        this.tower_light = new cc.Sprite(towerlightFrameName);
+        this.addChild(this.tower_light,4);
 
         this.aimer = new cc.Sprite(aimerFrameName);
-        this.addChild(this.aimer,3);
+        this.addChild(this.aimer,5);
         this.aimer.setVisible(false);
         this.aimer.setScale(1.5);
 
         this.setPosition(this.initPos);
         this.tower.setRotation(this.tower_angel);
+        this.tower_light.setRotation(this.tower_angel);
         this.aimer.setRotation(this.base_angel);
     },
     setStatus: function(status){
@@ -75,7 +91,11 @@ var Hero = cc.Node.extend({
             var mask;
             if (this.colortype == g_ColorType.blue) mask = 1;
             else mask = 2;
-            bulletController.spawnBullet(1, mask, this.getPosition(), cc.degreesToRadians(this.tower_angel));
+            var bulletangel = cc.degreesToRadians(this.tower_angel);
+            var heropos = this.getPosition();
+            var bulletpos = cc.p(heropos.x + CONST_TOWER_TO_BASE_DIS * Math.cos(bulletangel),heropos.y + CONST_TOWER_TO_BASE_DIS * Math.sin(bulletangel));
+            cc.log(bulletpos.x,bulletpos.y);
+            bulletController.spawnBullet(1, mask, bulletpos, cc.degreesToRadians(this.tower_angel));
             this.lastCDTime = CONST_CD_TIME;
             this.isCDing = true;
         }
@@ -94,6 +114,7 @@ var Hero = cc.Node.extend({
             new_angel = (this.tower_angel - CONST_INCREASE_BASE_ANGEL)%360;
         this.tower_angel = new_angel;
         this.tower.setRotation(new_angel);
+        this.tower_light.setRotation(new_angel);
     },
     updateBaseRoll: function(dt){
         var new_angel;
@@ -112,6 +133,14 @@ var Hero = cc.Node.extend({
             if(this.lastCDTime<=0) {
                 this.isCDing = false;
                 this.lastCDTime = 0;
+                this.base_light.setOpacity(255);
+                this.tower_light.setOpacity(255);
+            }
+            else
+            {
+                var opc = (CONST_CD_TIME - this.lastCDTime)/CONST_CD_TIME*255;
+                this.base_light.setOpacity(opc);
+                this.tower_light.setOpacity(opc);
             }
         }
         switch(this.status)
