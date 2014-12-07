@@ -5,7 +5,7 @@
 var CONST_MOVE_SPEED = 100;
 var CONST_INCREASE_BASE_ANGEL = 3;
 var CONST_INCREASE_TOWER_ANGEL = 3;
-var CONST_CD_TIME = 0.1;
+var CONST_CD_TIME = 2;
 var CONST_SPEED2_DURATION = 5;
 var CONST_CDHALF_DURATION = 5;
 var CONST_TOWER_TO_BASE_DIS = 20;
@@ -50,8 +50,8 @@ var Hero = cc.Node.extend({
             towerlightFrameName = res.blue_towerlight;
             aimerFrameName = res.blue_aimer;
             this.initPos = cc.p(200,cc.winSize.height/2);
-            this.tower_angel = -90;
-            this.base_angel = -90;
+            this.tower_angel = 45;
+            this.base_angel = 45;
         }
         else if(this.colortype == g_ColorType.red)
         {
@@ -202,6 +202,9 @@ var Hero = cc.Node.extend({
         if(this.life <= 0 )
         {
             //gameover;
+            currentLayer.unscheduleUpdate();
+            var gameoverLayer = new GameOverLayer();
+            currentLayer.addChild(gameoverLayer,100);
         }
     }
 

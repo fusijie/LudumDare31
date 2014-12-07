@@ -2,7 +2,7 @@
     "project_type": "javascript",
 
     "debugMode" : 1,
-    "showFPS" : true,
+    "showFPS" : false,
     "frameRate" : 60,
     "id" : "gameCanvas",
     "renderMode" : 0,
@@ -18,8 +18,8 @@
         "src/gameController.js",
         "src/item.js",
         "src/itemController.js",
-        "src/gameMenuScene.js",
-        "src/gameOverScene.js",
+        "src/gameMenuLayer.js",
+        "src/gameOverLayer.js",
         "src/gameScene.js",
         "src/bulletController.js"
     ]

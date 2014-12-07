@@ -41,7 +41,8 @@ var Item = cc.Sprite.extend({
 
         this.attr({
             x: cc.winSize.width * Math.ceil(Math.random()*9)*0.1,
-            y: cc.winSize.height * Math.ceil(Math.random()*9)*0.1
+            y: cc.winSize.height * Math.ceil(Math.random()*9)*0.1,
+            scale: 0.8
         });
 
         g_ItemPool.push(this);

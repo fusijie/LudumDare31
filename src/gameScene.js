@@ -6,8 +6,11 @@ var GameSceneLayer = cc.Layer.extend({
     sprite:null,
     blue: null,
     red: null,
+    gc: null,
+    ic: null,
     blue_lifes: [],
     red_lifes: [],
+    menu_layer: null,
     blue_life_count: 5,
     red_life_count:5,
     temp_90_pressed: false,
@@ -60,95 +63,9 @@ var GameSceneLayer = cc.Layer.extend({
             this.red_lifes[i] = red_life;
         }
 
-        //add Custom Event
-        var lifeminuslistener = cc.EventListener.create({
-            event: cc.EventListener.CUSTOM,
-            eventName: "lifeminus_event",
-            callback: function(event){
-                var hero_type = event.getUserData();
-                if(hero_type == g_ColorType.blue)
-                {
-                    this.blue_life_count --;
-                    cc.log(this.blue_life_count);
-                    if(this.blue_life_count>=0)
-                        this.blue_lifes[4 - this.blue_life_count].setTexture(res.life_frame);
+        this.menu_layer = new GameMenuLayer();
+        this.addChild(this.menu_layer,100);
 
-                }
-                else if(hero_type == g_ColorType.red)
-                {
-                    this.red_life_count --;
-                    if(this.red_life_count>=0)
-                        this.red_lifes[4 - this.red_life_count].setTexture(res.life_frame);
-                }
-            }.bind(this)
-
-        });
-        cc.eventManager.addListener(lifeminuslistener, 1);
-
-        var lifepluslistener = cc.EventListener.create({
-            event: cc.EventListener.CUSTOM,
-            eventName: "lifeplus_event",
-            callback: function(event){
-                var hero_type = event.getUserData();
-                if(hero_type == g_ColorType.blue)
-                {
-                    this.blue_life_count ++;
-                    cc.log(this.blue_life_count);
-                    this.blue_lifes[5 - this.blue_life_count].setTexture(res.blue_life);
-
-                }
-                else if(hero_type == g_ColorType.red)
-                {
-                    this.red_life_count ++;
-                    cc.log(this.red_life_count);
-                    this.red_lifes[5 - this.red_life_count].setTexture(res.red_life);
-                }
-            }.bind(this)
-
-        });
-        cc.eventManager.addListener(lifepluslistener, 1);
-
-        //after tips.
-        this.blue.setStatus(STATUS.MOVE);
-        this.red.setStatus(STATUS.MOVE);
-
-        //add GameController
-        var gc = new GameController(this.blue,this.red);
-
-        //add ItemController
-        var ic = new ItemController();
-
-        //enable AI?
-        //gc.setAIEnable(true);
-
-        //add Update
-        this.schedule(function(dt){
-            this.blue.update(dt);
-            this.red.update(dt);
-            bulletController.attacks(dt);
-            gc.update(dt);
-            ic.update(dt);
-        },0);
-
-        //add Star
-        this.schedule(function(dt){
-            var random_count = Math.ceil(Math.random()*3);
-            for(var i = 0;i < random_count;i++){
-                var random_file = Math.ceil(Math.random()*3);
-                var filename = "res/star" + random_file + ".png";
-                var star = new cc.Sprite(filename);
-                star.attr({
-                    x: cc.winSize.width * Math.random(),
-                    y: cc.winSize.height * Math.random(),
-                    opacity: 0,
-                    rotate: Math.random()
-                });
-                this.addChild(star,2);
-                star.runAction(cc.sequence(cc.fadeIn(1.0),cc.delayTime(0.5),cc.fadeOut(1.0),cc.removeSelf()));
-            }
-        }.bind(this),0.1);
-
-        this.initKeyBoardControl();
         return true;
     },
     initKeyBoardControl: function()
@@ -240,6 +157,100 @@ var GameSceneLayer = cc.Layer.extend({
                 }
             }
         }, this);
+    },
+    onStartGame: function()
+    {
+        this.menu_layer.removeFromParent();
+        //add Custom Event
+        var lifeminuslistener = cc.EventListener.create({
+            event: cc.EventListener.CUSTOM,
+            eventName: "lifeminus_event",
+            callback: function(event){
+                var hero_type = event.getUserData();
+                if(hero_type == g_ColorType.blue)
+                {
+                    this.blue_life_count --;
+                    cc.log(this.blue_life_count);
+                    if(this.blue_life_count>=0)
+                        this.blue_lifes[4 - this.blue_life_count].setTexture(res.life_frame);
+
+                }
+                else if(hero_type == g_ColorType.red)
+                {
+                    this.red_life_count --;
+                    if(this.red_life_count>=0)
+                        this.red_lifes[4 - this.red_life_count].setTexture(res.life_frame);
+                }
+            }.bind(this)
+
+        });
+        cc.eventManager.addListener(lifeminuslistener, 1);
+
+        var lifepluslistener = cc.EventListener.create({
+            event: cc.EventListener.CUSTOM,
+            eventName: "lifeplus_event",
+            callback: function(event){
+                var hero_type = event.getUserData();
+                if(hero_type == g_ColorType.blue)
+                {
+                    this.blue_life_count ++;
+                    cc.log(this.blue_life_count);
+                    this.blue_lifes[5 - this.blue_life_count].setTexture(res.blue_life);
+
+                }
+                else if(hero_type == g_ColorType.red)
+                {
+                    this.red_life_count ++;
+                    cc.log(this.red_life_count);
+                    this.red_lifes[5 - this.red_life_count].setTexture(res.red_life);
+                }
+            }.bind(this)
+
+        });
+        cc.eventManager.addListener(lifepluslistener, 1);
+
+        //after tips.
+        this.blue.setStatus(STATUS.MOVE);
+        this.red.setStatus(STATUS.MOVE);
+
+        //add GameController
+        this.gc = new GameController(this.blue,this.red);
+
+        //add ItemController
+        this.ic = new ItemController();
+
+        //enable AI?
+        //gc.setAIEnable(true);
+
+        //add Update
+        this.scheduleUpdate();
+
+        //add Star
+        this.schedule(function(dt){
+            var random_count = Math.ceil(Math.random()*3);
+            for(var i = 0;i < random_count;i++){
+                var random_file = Math.ceil(Math.random()*3);
+                var filename = "res/star" + random_file + ".png";
+                var star = new cc.Sprite(filename);
+                star.attr({
+                    x: cc.winSize.width * Math.random(),
+                    y: cc.winSize.height * Math.random(),
+                    opacity: 0,
+                    rotate: Math.random()
+                });
+                this.addChild(star,2);
+                star.runAction(cc.sequence(cc.fadeIn(1.0),cc.delayTime(0.5),cc.fadeOut(1.0),cc.removeSelf()));
+            }
+        }.bind(this),0.1);
+
+        this.initKeyBoardControl();
+    },
+    update: function(dt){
+        this.blue.update(dt);
+        this.red.update(dt);
+        bulletController.attacks(dt);
+        this.gc.update(dt);
+        this.ic.update(dt);
     }
 });
 
