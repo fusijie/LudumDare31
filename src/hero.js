@@ -97,11 +97,10 @@ var Hero = cc.Node.extend({
             var mask;
             if (this.colortype == g_ColorType.blue) mask = 1;
             else mask = 2;
-            var bulletangel = cc.degreesToRadians(this.tower_angel);
-            var heropos = this.getPosition();
-            var bulletpos = cc.p(heropos.x + CONST_TOWER_TO_BASE_DIS * Math.cos(bulletangel),heropos.y + CONST_TOWER_TO_BASE_DIS * Math.sin(bulletangel));
-            cc.log(bulletpos.x,bulletpos.y);
-            bulletController.spawnBullet(1, mask, bulletpos, cc.degreesToRadians(this.tower_angel));
+            var angle = cc.degreesToRadians(this.tower_angel);
+            var pos = cc.pRotateByAngle(cc.p(BULLET_RADUIS + this.radius, 0), cc.p(0,0), cc.PI/2 - angle);
+            pos = cc.pAdd(this.getPosition(), pos);
+            bulletController.spawnBullet(1, mask, pos, angle);
             this.lastCDTime = this.cd;
             this.isCDing = true;
         }
@@ -194,6 +193,9 @@ var Hero = cc.Node.extend({
     },
     losslife: function(){
         this.life --;
+        var event = new cc.EventCustom("life_event");
+        event.setUserData(this.colortype);
+        cc.eventManager.dispatchEvent(event);
         if(this.life <= 0 )
         {
             //gameover;

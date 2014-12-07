@@ -81,7 +81,7 @@ var Item = cc.Sprite.extend({
         switch(this.style)
         {
             case STYLE.rush:
-                bulletController.changeAngle(mask, who.getPosition());
+                bulletController.changeAngle(mask);
                 break;
             case STYLE.disapper:
                 bulletController.weakBullet(mask);

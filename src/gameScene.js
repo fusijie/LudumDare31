@@ -46,7 +46,7 @@ var GameSceneLayer = cc.Layer.extend({
             var blue_life = new cc.Sprite(res.blue_life);
             blue_life.attr({
                 x:25,
-                y:cc.winSize.height - 90 - 60 * i,
+                y:cc.winSize.height - 90 - 60 * i
             });
             this.addChild(blue_life,4);
             this.blue_lifes[i] = blue_life;
@@ -54,12 +54,34 @@ var GameSceneLayer = cc.Layer.extend({
             var red_life = new cc.Sprite(res.red_life);
             red_life.attr({
                 x:cc.winSize.width - 25,
-                y:cc.winSize.height - 90 - 60 * i,
+                y:cc.winSize.height - 90 - 60 * i
             });
             this.addChild(red_life,4);
             this.red_lifes[i] = red_life;
-
         }
+
+        //add Custom Event
+        var lifelistener = cc.EventListener.create({
+            event: cc.EventListener.CUSTOM,
+            eventName: "life_event",
+            callback: function(event){
+                var hero_type = event.getUserData();
+                if(hero_type == g_ColorType.blue)
+                {
+                    this.blue_life_count --;
+                    cc.log(this.blue_life_count);
+                    this.blue_lifes[this.blue_life_count].setTexture(res.life_frame);
+
+                }
+                else if(hero_type == g_ColorType.red)
+                {
+                    this.red_life_count --;
+                    this.red_lifes[this.red_life_count].setTexture(res.life_frame);
+                }
+            }.bind(this)
+
+        });
+        cc.eventManager.addListener(lifelistener, 1);
 
         //after tips.
         this.blue.setStatus(STATUS.MOVE);
