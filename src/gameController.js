@@ -3,7 +3,29 @@ GameController = function(blue, red){
 
     this.blue = blue;
     this.red = red;
+    this.timetoexcuteAI = 0;
+    this.blue_cur_pos;
     this.update = function(dt) {//TODO:要加入dt
+        if(g_IsAIEnable)
+        {
+            this.timetoexcuteAI -= dt;
+            if(this.timetoexcuteAI <= 0){
+                this.blue_cur_pos = this.blue.getPosition();
+                this.red.setStatus(STATUS.ROLL);
+                this.timetoexcuteAI = CONST_CD_TIME*(1+g_AIConfig.scheduleFator*Math.random());
+            }
+            if(this.red.status == STATUS.ROLL)
+            {
+                this.blue_cur_pos = this.blue.getPosition();
+                var angel = this.getAngel(this.red.getPosition(), this.blue_cur_pos);
+                cc.log(angel-this.red.base_angel);
+                if(Math.abs(angel-this.red.base_angel) < 5)
+                {
+                    this.red.shoot();
+                    this.red.setStatus(STATUS.MOVE);
+                }
+            }
+        }
         this.borderCross(dt);
         this.checkHeroCollision(dt);
     };
@@ -53,5 +75,49 @@ GameController = function(blue, red){
             this.red.setPosition(cc.pRotateByAngle(cc.pAdd(cc.p(-distance2,0),red_Pos),red_Pos,angel));
         }
     };
+    this.setAIEnable = function(isAIEnable)
+    {
+        g_IsAIEnable = isAIEnable;
+    };
+    this.getAngel = function(obj1, obj2)
+    {
+        if(obj1.x == obj2.x && obj1.y < obj2.y)
+        {
+            return 0;
+        }
+        else if(obj1.x == obj2.x && obj1.y > obj2.y)
+        {
+            return 180;
+        }
+        else if(obj1.x < obj2.x && obj1.y == obj2.y)
+        {
+            return 90;
+        }
+        else if(obj1.x > obj2.x && obj1.y == obj2.y)
+        {
+            return 270;
+        }
+        else if(obj1.x < obj2.x && obj1.y < obj2.y)
+        {
+            return Math.atan2(obj2.x-obj1.x,obj2.y-obj1.y);
+        }
+        else if(obj1.x < obj2.x && obj1.y > obj2.y)
+        {
+            return 90 + Math.atan2(obj1.y-obj2.y,obj2.x-obj1.x);
+        }
+        else if(obj1.x > obj2.x && obj1.y < obj2.y)
+        {
+            return 270 + Math.atan2(obj2.y-obj1.y,obj1.x-obj2.x);
+        }
+        else if(obj1.x > obj2.x && obj1.y > obj2.y)
+        {
+            return 180 + Math.atan2(obj1.x-obj2.x,obj1.y-obj2.y);
+        }
+        else
+        {
+            return 0;
+        }
+
+    }
 
 };

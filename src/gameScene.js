@@ -40,8 +40,13 @@ var GameSceneLayer = cc.Layer.extend({
         this.blue.setStatus(STATUS.MOVE);
         this.red.setStatus(STATUS.MOVE);
 
+        //add GameController
+        var gc = new GameController(this.blue,this.red);
+
+        //enable AI?
+        //gc.setAIEnable(true);
+
         //add Update
-        var gc = new GameController(this.blue,this.red,this.blue_copy,this.red_copy);
         this.schedule(function(dt){
             this.blue.update(dt);
             this.red.update(dt);
@@ -77,7 +82,7 @@ var GameSceneLayer = cc.Layer.extend({
                         cc.log("Key " + keyCode.toString() + " was pressed!");
                     }
                 }
-                else if(keyCode == 190)
+                else if(keyCode == 190 && !g_IsAIEnable)
                 {
                     if(!target.temp_190_pressed && !target.temp_191_pressed)
                     {
@@ -87,7 +92,7 @@ var GameSceneLayer = cc.Layer.extend({
                         cc.log("Key " + keyCode.toString() + " was pressed!");
                     }
                 }
-                else if(keyCode == 191)
+                else if(keyCode == 191 && !g_IsAIEnable)
                 {
                     if(!target.temp_191_pressed && !target.temp_190_pressed)
                     {
@@ -119,7 +124,7 @@ var GameSceneLayer = cc.Layer.extend({
                         cc.log("Key " + keyCode.toString() + " was released!");
                     }
                 }
-                else if(keyCode == 190)
+                else if(keyCode == 190 && !g_IsAIEnable)
                 {
                     if(target.temp_190_pressed)
                     {
@@ -130,7 +135,7 @@ var GameSceneLayer = cc.Layer.extend({
                         cc.log("Key " + keyCode.toString() + " was released!");
                     }
                 }
-                else if(keyCode == 191)
+                else if(keyCode == 191 && !g_IsAIEnable)
                 {
                     if(target.temp_191_pressed)
                     {
