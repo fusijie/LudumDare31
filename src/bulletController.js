@@ -110,8 +110,13 @@ bulletController.spawnBullet = function (type, mask, pos, angle) {
 };
 
 var BasicBullet = cc.Sprite.extend({
-    ctor: function(){
-        this._super(res.bubble_png);
+    ctor: function(mask){
+        var bubblefilename;
+        if(mask == 1)
+            bubblefilename = res.blue_bubble;
+        else
+            bubblefilename = res.red_bubble;
+        this._super(bubblefilename);
         this.mask = 0;  //1 is Role A, 2 is Role B, 0 is nobody
         this.speed = {x: BULLET_SPEED, y: BULLET_SPEED}; //traveling speed
         this.duration = 10;
@@ -154,7 +159,7 @@ var BasicBullet = cc.Sprite.extend({
 });
 
 BasicBullet.create = function(mask, pos, angle){
-    var sprite = new BasicBullet();
+    var sprite = new BasicBullet(mask);
     sprite.mask = mask;
     sprite.speed.x *= Math.sin(angle);
     sprite.speed.y *= Math.cos(angle);
@@ -164,7 +169,6 @@ BasicBullet.create = function(mask, pos, angle){
     sprite.setPosition(pos);
     if(sprite.mask == 2)
     {
-        sprite.setColor(cc.color(0,125,0));
         bulletController.bulletsA.push(sprite);
     }
     else

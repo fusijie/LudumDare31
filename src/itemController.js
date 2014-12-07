@@ -12,13 +12,11 @@ ItemController = function(){
         this.scheduleTime -= dt;
         if(this.scheduleTime <= 0){
             //show item
-            //var random_item_index = Math.ceil(Math.random()*5);
-            var random_item_index = 0;
+            var random_item_index = Math.ceil(Math.random()*6)-1;
+            //var random_item_index = 0;
             var item = new Item(random_item_index);
-            currentLayer.addChild(item,100);
+            currentLayer.addChild(item,4);
             this.scheduleTime = CONST_ITEM_TIME*(1+CONST_ITEM_RANDOM_FACTOR*Math.random());
         }
     };
-
-
 };
