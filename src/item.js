@@ -69,19 +69,34 @@ var Item = cc.Sprite.extend({
         this.removeFromParent();
 
         //do real function
+        var mask;
+        if(who.colortype == g_ColorType.blue)
+        {
+            mask = 1;
+        }
+        else
+        {
+            mask = 2;
+        }
         switch(this.style)
         {
             case STYLE.rush:
+                bulletController.changeAngle(mask, who.getPosition());
                 break;
             case STYLE.disapper:
+                bulletController.weakBullet(mask);
                 break;
             case STYLE.sbullet:
+                bulletController.spawnBullet(2, mask, who.getPosition(), cc.degreesToRadians(who.tower_angel));
                 break;
             case STYLE.hpplus:
+                who.getlife();
                 break;
             case STYLE.cdhalf:
+                who.setCDHalf();
                 break;
             case STYLE.speed2:
+                who.setSpeed2();
                 break;
             default :
                 ;

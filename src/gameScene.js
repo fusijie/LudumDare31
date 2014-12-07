@@ -6,6 +6,10 @@ var GameSceneLayer = cc.Layer.extend({
     sprite:null,
     blue: null,
     red: null,
+    blue_lifes: [],
+    red_lifes: [],
+    blue_life_count: 5,
+    red_life_count:5,
     temp_90_pressed: false,
     temp_88_pressed: false,
     temp_190_pressed: false,
@@ -35,6 +39,27 @@ var GameSceneLayer = cc.Layer.extend({
             y: cc.winSize.height/2
         });
         this.addChild(border,3)
+
+        //add Life
+        for(var i =0 ; i < 5; i++)
+        {
+            var blue_life = new cc.Sprite(res.blue_life);
+            blue_life.attr({
+                x:25,
+                y:cc.winSize.height - 90 - 60 * i,
+            });
+            this.addChild(blue_life,4);
+            this.blue_lifes[i] = blue_life;
+
+            var red_life = new cc.Sprite(res.red_life);
+            red_life.attr({
+                x:cc.winSize.width - 25,
+                y:cc.winSize.height - 90 - 60 * i,
+            });
+            this.addChild(red_life,4);
+            this.red_lifes[i] = red_life;
+
+        }
 
         //after tips.
         this.blue.setStatus(STATUS.MOVE);

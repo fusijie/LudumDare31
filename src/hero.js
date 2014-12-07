@@ -5,8 +5,11 @@
 var CONST_MOVE_SPEED = 100;
 var CONST_INCREASE_BASE_ANGEL = 3;
 var CONST_INCREASE_TOWER_ANGEL = 3;
-var CONST_CD_TIME = 3;
+var CONST_CD_TIME = 0.1;
+var CONST_SPEED2_DURATION = 5;
+var CONST_CDHALF_DURATION = 5;
 var CONST_TOWER_TO_BASE_DIS = 20;
+var CONST_LIFE = 5;
 var STATUS =  {IDLE: "idle", MOVE: "move", ROLL: "roll", SHOOT: "shoot", DEAD: "dead", WIN: "win"};
 
 var Hero = cc.Node.extend({
@@ -25,6 +28,9 @@ var Hero = cc.Node.extend({
     isClockWise: true,
     isCDing: false,
     lastCDTime: 0,
+    speed: CONST_MOVE_SPEED,
+    cd: CONST_CD_TIME,
+    life: CONST_LIFE,
     ctor: function(colortype) {
         this._super();
 
@@ -96,14 +102,34 @@ var Hero = cc.Node.extend({
             var bulletpos = cc.p(heropos.x + CONST_TOWER_TO_BASE_DIS * Math.cos(bulletangel),heropos.y + CONST_TOWER_TO_BASE_DIS * Math.sin(bulletangel));
             cc.log(bulletpos.x,bulletpos.y);
             bulletController.spawnBullet(1, mask, bulletpos, cc.degreesToRadians(this.tower_angel));
-            this.lastCDTime = CONST_CD_TIME;
+            this.lastCDTime = this.cd;
             this.isCDing = true;
         }
+    },
+    setSpeed2: function()
+    {
+        if(this.speed == CONST_MOVE_SPEED)
+        {
+            this.speed = CONST_MOVE_SPEED * 2;
+            this.scheduleOnce(function(dt){
+                this.speed = CONST_MOVE_SPEED;
+            },CONST_SPEED2_DURATION);
+        }
+    },
+    setCDHalf: function()
+    {
+       if(this.cd  == CONST_CD_TIME)
+       {
+           this.cd = CONST_CD_TIME/2;
+           this.scheduleOnce(function(dt){
+
+           },CONST_CDHALF_DURATION);
+       }
     },
     updateMove: function(dt){
         var cur_pos = this.getPosition();
         var base_angel_degrees = cc.degreesToRadians(this.base_angel);
-        var new_pos = cc.p(cur_pos.x + CONST_MOVE_SPEED * Math.sin(base_angel_degrees)*dt,cur_pos.y + CONST_MOVE_SPEED * Math.cos(base_angel_degrees)*dt);
+        var new_pos = cc.p(cur_pos.x + this.speed * Math.sin(base_angel_degrees)*dt,cur_pos.y + this.speed * Math.cos(base_angel_degrees)*dt);
         this.setPosition(new_pos);
     },
     updateTowerRoll: function(dt){
@@ -138,7 +164,7 @@ var Hero = cc.Node.extend({
             }
             else
             {
-                var opc = (CONST_CD_TIME - this.lastCDTime)/CONST_CD_TIME*255;
+                var opc = (this.cd - this.lastCDTime)/this.cd*255;
                 this.base_light.setOpacity(opc);
                 this.tower_light.setOpacity(opc);
             }
@@ -157,6 +183,20 @@ var Hero = cc.Node.extend({
                 break;
             case STATUS.SHOOT:
                 break;
+        }
+    },
+    getlife: function()
+    {
+        if(this.life != CONST_LIFE)
+        {
+            this.life ++;
+        }
+    },
+    losslife: function(){
+        this.life --;
+        if(this.life <= 0 )
+        {
+            //gameover;
         }
     }
 

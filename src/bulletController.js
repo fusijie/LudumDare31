@@ -96,7 +96,7 @@ bulletController.weakBullet = function(mask){
     var bulletsX = mask === 1? this.bulletsA: this.bulletsB;
     for(var k = bulletsX.length-1; k >= 0; k--) {
         var bullet =  bulletsX[k];
-        bullet.curDuration += bullet.curDuration/2;
+        bullet.curDuration += bullet.duration/2;
     }
 };
 
