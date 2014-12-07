@@ -92,13 +92,18 @@ var bulletController = {
     }
 };
 
-bulletController.spawnBullet = function (mask, pos, angle) {
-    BasicBullet.create(mask, pos, angle);
+bulletController.spawnBullet = function (type, mask, pos, angle) {
+    if(type === 1){
+        BasicBullet.create(mask, pos, angle);
+    }
+    else if(type === 2){
+        scatterBullet.create(mask, pos, angle);
+    }
 };
 
 var BasicBullet = cc.Sprite.extend({
     ctor: function(){
-        this._super(res.bubble_png)
+        this._super(res.bubble_png);
         this.mask = 0;  //1 is Role A, 2 is Role B, 0 is nobody
         this.angle = 0; //arc of attack, in radians
         this.speed = {x: 50, y: 50}; //traveling speed
@@ -119,7 +124,23 @@ var BasicBullet = cc.Sprite.extend({
         var selfPos = this.getPosition();
         var nextPos = cc.p(selfPos.x + this.speed.x*dt, selfPos.y + this.speed.y*dt);
         //var nextPos = cc.pRotateByAngle(cc.pAdd(cc.p(x = this.speed.x*dt, y = this.speed.y*dt), selfPos), selfPos, this.angle);
-        this.setPosition(nextPos)
+        this.setPosition(nextPos);
+        this.checkBorder();
+    },
+    checkBorder: function() {
+        var obj_pos = this.getPosition();
+        if (obj_pos.x < 0) {
+            this.setPositionX(cc.winSize.width);
+        }
+        else if (obj_pos.x > cc.winSize.width) {
+            this.setPositionX(0);
+        }
+        else if (obj_pos.y < 0) {
+            this.setPositionY(cc.winSize.height);
+        }
+        else if (obj_pos.y > cc.winSize.height) {
+            this.setPositionY(0);
+        }
     }
 });
 
@@ -145,4 +166,14 @@ BasicBullet.create = function(mask, pos, angle){
         bulletController.bulletsB.push(sprite);
     }
     currentLayer.addChild(sprite, 1)
+};
+
+var scatterBullet = BasicBullet.extend({
+});
+
+scatterBullet.create = function(mask, pos, angle){
+    for(var i = 0; i < 6; i++){
+        BasicBullet.create(mask, pos, angle);
+        angle += cc.PI/3;
+    }
 };
