@@ -11,7 +11,9 @@ var STATUS =  {IDLE: "idle", MOVE: "move", ROLL: "roll", SHOOT: "shoot", DEAD: "
 var Hero = cc.Node.extend({
     colortype: null,
     base: null,
+    base_light: null,
     tower: null,
+    tower_light: null,
     aimer: null,
     initPos: null,
     base_angel:0,
@@ -29,12 +31,16 @@ var Hero = cc.Node.extend({
 
         //add entity
         var baseFrameName = "";
-        var aimerFrameName = "";
+        var baselightFrameName = "";
         var towerFramName = "";
+        var towerlightFrameName = "";
+        var aimerFrameName = "";
         if(this.colortype == g_ColorType.blue)
         {
             baseFrameName = res.blue_base;
+            baselightFrameName = res.blue_baselight;
             towerFramName = res.blue_tower;
+            towerlightFrameName = res.blue_towerlight;
             aimerFrameName = res.blue_aimer;
             this.initPos = cc.p(200,cc.winSize.height/2);
             this.tower_angel = -90;
@@ -43,7 +49,9 @@ var Hero = cc.Node.extend({
         else if(this.colortype == g_ColorType.red)
         {
             baseFrameName = res.red_base;
+            baselightFrameName = res.red_baselight;
             towerFramName = res.red_tower;
+            towerlightFrameName = res.red_towerlight;
             aimerFrameName = res.red_aimer;
             this.initPos = cc.p(cc.winSize.width-200, cc.winSize.height/2);
             this.tower_angel = -135;
@@ -54,16 +62,23 @@ var Hero = cc.Node.extend({
         this.base  = new cc.Sprite(baseFrameName);
         this.addChild(this.base,1);
 
+        this.base_light = new cc.Sprite(baselightFrameName);
+        this.addChild(this.base_light,2)
+
         this.tower = new cc.Sprite(towerFramName);
-        this.addChild(this.tower,2);
+        this.addChild(this.tower,3);
+
+        this.tower_light = new cc.Sprite(towerlightFrameName);
+        this.addChild(this.tower_light,4);
 
         this.aimer = new cc.Sprite(aimerFrameName);
-        this.addChild(this.aimer,3);
+        this.addChild(this.aimer,5);
         this.aimer.setVisible(false);
         this.aimer.setScale(1.5);
 
         this.setPosition(this.initPos);
         this.tower.setRotation(this.tower_angel);
+        this.tower_light.setRotation(this.tower_angel);
         this.aimer.setRotation(this.base_angel);
     },
     setStatus: function(status){
@@ -94,6 +109,7 @@ var Hero = cc.Node.extend({
             new_angel = (this.tower_angel - CONST_INCREASE_BASE_ANGEL)%360;
         this.tower_angel = new_angel;
         this.tower.setRotation(new_angel);
+        this.tower_light.setRotation(new_angel);
     },
     updateBaseRoll: function(dt){
         var new_angel;

@@ -43,6 +43,9 @@ var GameSceneLayer = cc.Layer.extend({
         //add GameController
         var gc = new GameController(this.blue,this.red);
 
+        //add ItemController
+        var ic = new ItemController();
+
         //enable AI?
         //gc.setAIEnable(true);
 
@@ -52,6 +55,7 @@ var GameSceneLayer = cc.Layer.extend({
             this.red.update(dt);
             bulletController.attacks(dt);
             gc.update(dt);
+            ic.update(dt);
         },0);
 
         this.initKeyBoardControl();

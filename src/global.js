@@ -6,6 +6,10 @@ var g_ColorType = {
     blue: "blue"
 };
 
+//Item
+var g_ItemPool = [];
+
+//AI
 var g_IsAIEnable = false;
 
 var g_AIConfig={

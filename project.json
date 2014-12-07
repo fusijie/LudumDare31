@@ -16,6 +16,8 @@
         "src/bubble.js",
         "src/hero.js",
         "src/gameController.js",
+        "src/item.js",
+        "src/itemController.js",
         "src/gameMenuScene.js",
         "src/gameOverScene.js",
         "src/gameScene.js",
