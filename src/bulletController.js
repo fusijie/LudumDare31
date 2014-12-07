@@ -50,7 +50,7 @@ var bulletController = {
                 var dist = cc.pDistance(bullet.getPosition(), target.getPosition());
                 if (dist < bullet.radius  + target.radius) {
                     bullet.onCollide(target);
-                    bullet.curDuration = bullet.curDuration + 1;
+                    bullet.curDuration = bullet.duration + 1;
 
                 }
             }
@@ -59,7 +59,7 @@ var bulletController = {
                 var dist = cc.pDistance(bullet.getPosition(), target.getPosition());
                 if (dist < bullet.radius + target.radius) {
                     bullet.onCollide(target);
-                    bullet.curDuration = bullet.curDuration + 1;
+                    bullet.curDuration = bullet.duration + 1;
                 }
             }
 
