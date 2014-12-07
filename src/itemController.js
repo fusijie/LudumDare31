@@ -16,6 +16,7 @@ ItemController = function(){
             //var random_item_index = 0;
             var item = new Item(random_item_index);
             currentLayer.addChild(item,4);
+            audioEngine.playEffect(res.audio_item_show);
             this.scheduleTime = CONST_ITEM_TIME*(1+CONST_ITEM_RANDOM_FACTOR*Math.random());
         }
     };
