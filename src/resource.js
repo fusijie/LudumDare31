@@ -8,12 +8,14 @@ var res = {
     blue_tower : "res/blue_tower.png",
     blue_towerlight : "res/blue_towerlight.png",
     blue_life: "res/blue_life.png",
+    blue_bubble: "res/blue_bubble.png",
     red_aimer : "res/red_aimer.png",
     red_base : "res/red_base.png",
     red_baselight: "res/red_baselight.png",
     red_tower : "res/red_tower.png",
     red_towerlight: "res/red_towerlight.png",
     red_life: "res/red_life.png",
+    red_bubble: "res/red_bubble.png",
     game_bk : "res/game_bk.jpg",
     game_border : "res/game_border.png",
     item_rush: "res/itemRush.png",
@@ -27,7 +29,10 @@ var res = {
     audio_shoot_1: "res/lasershoot2.wav",
     audio_explosion: "res/explosion1.wav",
     audio_item_show: "res/itemshow.wav",
-    audio_item_taken: "res/itemtaken.wav"
+    audio_item_taken: "res/itemtaken.wav",
+    star1: "res/star1.png",
+    star2: "res/star2.png",
+    star3: "res/star3.png"
 };
 
 var g_resources = [];

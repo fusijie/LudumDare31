@@ -30,7 +30,7 @@ var GameSceneLayer = cc.Layer.extend({
         this.blue = new Hero(g_ColorType.blue);
         this.addChild(this.blue,2);
         this.red = new Hero(g_ColorType.red);
-        this.addChild(this.red,2);
+        this.addChild(this.red,3);
 
         //add Border
         var border = new cc.Sprite(res.game_border);
@@ -38,7 +38,7 @@ var GameSceneLayer = cc.Layer.extend({
             x: cc.winSize.width/2,
             y: cc.winSize.height/2
         });
-        this.addChild(border,3)
+        this.addChild(border,5)
 
         //add Life
         for(var i =0 ; i < 5; i++)
@@ -48,7 +48,7 @@ var GameSceneLayer = cc.Layer.extend({
                 x:25,
                 y:cc.winSize.height - 90 - 60 * i
             });
-            this.addChild(blue_life,4);
+            this.addChild(blue_life,6);
             this.blue_lifes[i] = blue_life;
 
             var red_life = new cc.Sprite(res.red_life);
@@ -56,7 +56,7 @@ var GameSceneLayer = cc.Layer.extend({
                 x:cc.winSize.width - 25,
                 y:cc.winSize.height - 90 - 60 * i
             });
-            this.addChild(red_life,4);
+            this.addChild(red_life,6);
             this.red_lifes[i] = red_life;
         }
 
@@ -70,13 +70,15 @@ var GameSceneLayer = cc.Layer.extend({
                 {
                     this.blue_life_count --;
                     cc.log(this.blue_life_count);
-                    this.blue_lifes[this.blue_life_count].setTexture(res.life_frame);
+                    if(this.blue_life_count>=0)
+                        this.blue_lifes[4 - this.blue_life_count].setTexture(res.life_frame);
 
                 }
                 else if(hero_type == g_ColorType.red)
                 {
                     this.red_life_count --;
-                    this.red_lifes[this.red_life_count].setTexture(res.life_frame);
+                    if(this.red_life_count>=0)
+                        this.red_lifes[4 - this.red_life_count].setTexture(res.life_frame);
                 }
             }.bind(this)
 
@@ -104,6 +106,24 @@ var GameSceneLayer = cc.Layer.extend({
             gc.update(dt);
             ic.update(dt);
         },0);
+
+        //add Star
+        this.schedule(function(dt){
+            var random_count = Math.ceil(Math.random()*3);
+            for(var i = 0;i < random_count;i++){
+                var random_file = Math.ceil(Math.random()*3);
+                var filename = "res/star" + random_file + ".png";
+                var star = new cc.Sprite(filename);
+                star.attr({
+                    x: cc.winSize.width * Math.random(),
+                    y: cc.winSize.height * Math.random(),
+                    opacity: 0,
+                    rotate: Math.random()
+                });
+                this.addChild(star,2);
+                star.runAction(cc.sequence(cc.fadeIn(1.0),cc.delayTime(0.5),cc.fadeOut(1.0),cc.removeSelf()));
+            }
+        }.bind(this),0.1);
 
         this.initKeyBoardControl();
         return true;
