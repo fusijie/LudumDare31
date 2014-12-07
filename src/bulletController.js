@@ -22,6 +22,12 @@ var bulletController = {
             var distance2 = distance - distance1;
             obj1.setPosition(cc.pRotateByAngle(cc.pAdd(cc.p(distance1,0),blue_Pos),blue_Pos,angel));
             obj2.setPosition(cc.pRotateByAngle(cc.pAdd(cc.p(-distance2,0),red_Pos),red_Pos,angel));
+
+            if(obj2.life)
+            {
+                obj1.curDuration = obj1.duration + 1;
+                obj1.onCollide(obj2);
+            }
         }
         //var obj1Momentum = {x:obj1.speed.x * obj1.mass.x, y:obj1.speed.y * obj1.mass.x};
         //var obj2Momentum = {x:obj2.speed.x * obj2.mass.y, y:obj2.speed.y * obj2.mass.y};
@@ -53,27 +59,26 @@ var bulletController = {
             var bulletsX = mask === 1? this.bulletsB: this.bulletsA;
             for(var k = bulletsX.length-1; k >= 0; k--) {
                 var bulletX =  bulletsX[k];
-                //var dist = cc.pDistance(bullet.getPosition(), bulletX.getPosition());
-                //if(dist < bullet.radius + bulletX.radius){
-                    this.collision(bullet, bulletX);
-                //}
+                this.collision(bullet, bulletX);
             }
 
             if(mask === 1) {
                 var target = currentLayer.blue;
-                var dist = cc.pDistance(bullet.getPosition(), target.getPosition());
-                if (dist < bullet.radius  + target.radius) {
-                    bullet.onCollide(target);
-                    bullet.curDuration = bullet.duration + 1;
-                }
+                this.collision(bullet, target);
+                //var dist = cc.pDistance(bullet.getPosition(), target.getPosition());
+                //if (dist < bullet.radius  + target.radius) {
+                //    bullet.onCollide(target);
+                //    bullet.curDuration = bullet.duration + 1;
+                //}
             }
             else if(mask ===2){
                 var target = currentLayer.red;
-                var dist = cc.pDistance(bullet.getPosition(), target.getPosition());
-                if (dist < bullet.radius + target.radius) {
-                    bullet.onCollide(target);
-                    bullet.curDuration = bullet.duration + 1;
-                }
+                this.collision(bullet, target);
+                //var dist = cc.pDistance(bullet.getPosition(), target.getPosition());
+                //if (dist < bullet.radius + target.radius) {
+                //    bullet.onCollide(target);
+                //    bullet.curDuration = bullet.duration + 1;
+                //}
             }
 
             bullet.curDuration = bullet.curDuration + dt;
