@@ -78,6 +78,9 @@ var Item = cc.Sprite.extend({
         {
             mask = 2;
         }
+
+        audioEngine.playEffect(res.audio_item_taken);
+
         switch(this.style)
         {
             case STYLE.rush:

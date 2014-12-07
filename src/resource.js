@@ -1,3 +1,5 @@
+var audioEngine = cc.audioEngine;
+
 var res = {
     bubble_png : "res/bubble.png",
     blue_aimer : "res/blue_aimer.png",
@@ -20,7 +22,12 @@ var res = {
     item_hpplus: "res/itemHpPlus.png",
     item_cdhalf: "res/itemCDHalf.png",
     item_speed2: "res/itemSpeed2.png",
-    life_frame: "res/life_frame.png"
+    life_frame: "res/life_frame.png",
+    audio_collision: "res/collision1.wav",
+    audio_shoot_1: "res/lasershoot2.wav",
+    audio_explosion: "res/explosion1.wav",
+    audio_item_show: "res/itemshow.wav",
+    audio_item_taken: "res/itemtaken.wav"
 };
 
 var g_resources = [];
