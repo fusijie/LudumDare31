@@ -7,18 +7,25 @@ var bulletController = {
     bulletsA: [],
     bulletsB: [],
     conservationOfMomentum: function(obj1, obj2){
+        var obj1Momentum = {x:obj1.speed.x * obj1.mass, y:obj1.speed.y * obj1.mass};
+        var obj2Momentum = {x:obj2.speed.x * obj2.mass, y:obj2.speed.y * obj2.mass};
+
         if(obj1.speed.x * obj2.speed.x > 0){
-            obj1.speed.x = (obj1.speed.x * obj1.mass - obj2.mass * obj2.speed.x) / obj1.mass;
+            obj1.speed.x = (obj1Momentum.x - obj2Momentum.x) / obj1.mass;
+            obj2.speed.x = (obj2Momentum.x - obj1Momentum.x) / obj2.mass;
         }
         else{
-            obj1.speed.x = (obj1.speed.x * obj1.mass + obj2.mass * obj2.speed.x) / obj1.mass;
+            obj1.speed.x = (obj1Momentum.x + obj2Momentum.x) / obj1.mass;
+            obj2.speed.x = (obj2Momentum.x + obj1Momentum.x) / obj2.mass;
         }
 
         if(obj1.speed.y * obj2.speed.y > 0){
-            obj1.speed.y = (obj1.speed.y * obj1.mass - obj2.mass * obj2.speed.y) / obj1.mass;
+            obj1.speed.y = (obj1Momentum.y - obj2Momentum.y) / obj1.mass;
+            obj2.speed.y = (obj2Momentum.y - obj1Momentum.y) / obj2.mass;
         }
         else{
-            obj1.speed.y = (obj1.speed.y * obj1.mass + obj2.mass * obj2.speed.y) / obj1.mass;
+            obj1.speed.y = (obj1Momentum.y + obj2Momentum.y) / obj1.mass;
+            obj2.speed.y = (obj2Momentum.y + obj1Momentum.y) / obj2.mass;
         }
     },
     proccessArray: function(bullets, mask, dt){
@@ -30,33 +37,16 @@ var bulletController = {
             for(var k = bulletsX.length-1; k >= 0; k--) {
                 var bulletX =  bulletsX[k];
                 var dist = cc.pDistance(bullet.getPosition(), bulletX.getPosition());
-                if(dist < bullet.radius*bullet.getScale() + bulletX.radius*bulletX.getScale()){
+                if(dist < bullet.radius + bulletX.radius){
                     bullet.onCollide(bulletX);
-                    if(bullet.mass >= bulletX.mass){
-                        this.conservationOfMomentum(bullet, bulletX);
-                        //if bullet is younger than bulletX, bulletX dead
-                        //otherwise bullet dead
-
-                        bulletsX.splice(k, 1);
-                        var tempAction = cc.spawn(cc.scaleTo(0.2, 0.1), cc.fadeOut(0.2));
-                        bulletX.runAction(cc.sequence(tempAction, cc.removeSelf()));
-                    }
-                    else{
-                        this.conservationOfMomentum(bulletX, bullet);
-
-                        bullets.splice(i, 1);
-                        var tempAction = cc.spawn(cc.scaleTo(0.2, 0.1), cc.fadeOut(0.2));
-                        bullet.runAction(cc.sequence(tempAction, cc.removeSelf()));
-
-                        continue;
-                    }
+                    this.conservationOfMomentum(bullet, bulletX);
                 }
             }
 
             if(mask === 1) {
                 var target = currentLayer.blue;
                 var dist = cc.pDistance(bullet.getPosition(), target.getPosition());
-                if (dist < bullet.radius * bullet.getScale() + target.radius) {
+                if (dist < bullet.radius  + target.radius) {
                     bullet.onCollide(target);
 
                     //this.conservationOfMomentum(target, bullet);
@@ -67,7 +57,7 @@ var bulletController = {
             else if(mask ===2){
                 var target = currentLayer.red;
                 var dist = cc.pDistance(bullet.getPosition(), target.getPosition());
-                if (dist < bullet.radius * bullet.getScale() + target.radius) {
+                if (dist < bullet.radius + target.radius) {
                     bullet.onCollide(target);
 
                     //this.conservationOfMomentum(target, bullet);
@@ -170,7 +160,6 @@ BasicBullet.create = function(mask, pos, angle){
 
     var random = cc.random0To1() + 0.5;
     sprite.mass = random*100;
-    sprite.setScale(random);
     sprite.setPosition(pos);
     if(sprite.mask == 2)
     {
