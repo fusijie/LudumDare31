@@ -5,7 +5,7 @@
 var CONST_MOVE_SPEED = 100;
 var CONST_INCREASE_BASE_ANGEL = 3;
 var CONST_INCREASE_TOWER_ANGEL = 3;
-var CONST_CD_TIME = 0;
+var CONST_CD_TIME = 3;
 var STATUS =  {IDLE: "idle", MOVE: "move", ROLL: "roll", SHOOT: "shoot", DEAD: "dead", WIN: "win"};
 
 var Hero = cc.Node.extend({
@@ -103,6 +103,7 @@ var Hero = cc.Node.extend({
             new_angel = (this.base_angel - CONST_INCREASE_BASE_ANGEL)%360;
         this.base_angel = new_angel;
         this.aimer.setRotation(new_angel);
+
     },
     update: function(dt){
         if(this.isCDing)
