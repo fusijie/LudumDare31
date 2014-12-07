@@ -85,22 +85,37 @@ var bulletController = {
             }
         }
     },
-
     attacks: function(dt){
         this.proccessArray(this.bulletsA, 1, dt);
         this.proccessArray(this.bulletsB, 2, dt);
     }
 };
 
-bulletController.spawnBullet = function (mask, pos, angle) {
-    BasicBullet.create(mask, pos, angle);
+bulletController.changeAngle = function(mask, pos){
+    var bulletsX = mask === 1? this.bulletsA: this.bulletsB;
+    for(var k = bulletsX.length-1; k >= 0; k--) {
+        var bullet =  bulletsX[k];
+        angle = cc.pToAngle(cc.pSub(pos, bullet.getPosition()));
+        angle = cc.PI/2 - angle;
+        bullet.speed.x = 50 *Math.sin(angle);
+        bullet.speed.y = 50 *Math.cos(angle);
+    }
+};
+
+
+bulletController.spawnBullet = function (type, mask, pos, angle) {
+    if(type === 1){
+        BasicBullet.create(mask, pos, angle);
+    }
+    else if(type === 2){
+        scatterBullet.create(mask, pos, angle);
+    }
 };
 
 var BasicBullet = cc.Sprite.extend({
     ctor: function(){
-        this._super(res.bubble_png)
+        this._super(res.bubble_png);
         this.mask = 0;  //1 is Role A, 2 is Role B, 0 is nobody
-        this.angle = 0; //arc of attack, in radians
         this.speed = {x: 50, y: 50}; //traveling speed
         this.duration = 10;
         this.curDuration = 0;
@@ -118,16 +133,29 @@ var BasicBullet = cc.Sprite.extend({
     onUpdate: function(dt){
         var selfPos = this.getPosition();
         var nextPos = cc.p(selfPos.x + this.speed.x*dt, selfPos.y + this.speed.y*dt);
-        //var nextPos = cc.pRotateByAngle(cc.pAdd(cc.p(x = this.speed.x*dt, y = this.speed.y*dt), selfPos), selfPos, this.angle);
-        this.setPosition(nextPos)
+        this.setPosition(nextPos);
+        this.checkBorder();
+    },
+    checkBorder: function() {
+        var obj_pos = this.getPosition();
+        if (obj_pos.x < 0) {
+            this.setPositionX(cc.winSize.width);
+        }
+        else if (obj_pos.x > cc.winSize.width) {
+            this.setPositionX(0);
+        }
+        else if (obj_pos.y < 0) {
+            this.setPositionY(cc.winSize.height);
+        }
+        else if (obj_pos.y > cc.winSize.height) {
+            this.setPositionY(0);
+        }
     }
 });
 
 BasicBullet.create = function(mask, pos, angle){
     var sprite = new BasicBullet();
     sprite.mask = mask;
-    sprite.angle = angle;
-
     sprite.speed.x *= Math.sin(angle);
     sprite.speed.y *= Math.cos(angle);
 
@@ -145,4 +173,16 @@ BasicBullet.create = function(mask, pos, angle){
         bulletController.bulletsB.push(sprite);
     }
     currentLayer.addChild(sprite, 1)
+
+    return sprite;
+};
+
+var scatterBullet = BasicBullet.extend({
+});
+
+scatterBullet.create = function(mask, pos, angle){
+    for(var i = 0; i < 6; i++){
+        BasicBullet.create(mask, pos, angle);
+        angle += cc.PI/3;
+    }
 };

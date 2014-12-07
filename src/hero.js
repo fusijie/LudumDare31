@@ -75,7 +75,7 @@ var Hero = cc.Node.extend({
             var mask;
             if (this.colortype == g_ColorType.blue) mask = 1;
             else mask = 2;
-            bulletController.spawnBullet(mask, this.getPosition(), cc.degreesToRadians(this.tower_angel));
+            bulletController.spawnBullet(1, mask, this.getPosition(), cc.degreesToRadians(this.tower_angel));
             this.lastCDTime = CONST_CD_TIME;
             this.isCDing = true;
         }
